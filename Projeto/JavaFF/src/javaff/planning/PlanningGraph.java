@@ -289,7 +289,7 @@ public class PlanningGraph
 						PGProposition p = (PGProposition) pit.next();
 						if (p.layer >= 0 && f.checkPropMutex(p, pLayer))
 						{
-							makeMutex(f, p, pLayer, newMutexes);
+							f.makeMutex(p, pLayer, newMutexes);
 						}
 					}
 				}
@@ -304,7 +304,7 @@ public class PlanningGraph
 			MutexPair m = (MutexPair) pmit.next();
 			if (checkPropMutex(m, pLayer))
 			{
-				makeMutex(m.node1, m.node2, pLayer, newMutexes);
+				m.node1.makeMutex(m.node2, pLayer, newMutexes);
 			}
 			else
 			{
@@ -322,13 +322,6 @@ public class PlanningGraph
 	protected boolean checkPropMutex(MutexPair m, int l)
 	{
 		return ((PGProposition) m.node1).checkPropMutex((PGProposition) m.node2, l);
-	}
-
-	protected void makeMutex(Node n1, Node n2, int l, Set mutexPairs)
-	{
-		n1.setMutex(n2, l);
-		n2.setMutex(n1, l);
-		mutexPairs.add(new MutexPair(n1, n2));
 	}
 
 	protected HashSet createActionLayer(List pActions, int pLayer)
@@ -400,7 +393,7 @@ public class PlanningGraph
 				PGAction a2 = (PGAction) a2it.next();
 				if (a2.layer >= 0 && checkActionMutex(a, a2, pLayer))
 				{
-					makeMutex(a, a2, pLayer, newMutexes);
+					a.makeMutex(a2, pLayer, newMutexes);
 				}
 			}
 		}
@@ -412,7 +405,7 @@ public class PlanningGraph
 			MutexPair m = (MutexPair) amit.next();
 			if (checkActionMutex(m, pLayer))
 			{
-				makeMutex(m.node1, m.node2, pLayer, newMutexes);
+				m.node1.makeMutex(m.node2, pLayer, newMutexes);
 			}
 			else
 			{
@@ -689,6 +682,12 @@ public class PlanningGraph
 			if (o == null) return false;
 			Integer i = (Integer) o;
 			return i.intValue() >= l;
+		}
+
+		public void makeMutex(Node n2, int l, Set mutexPairs) {
+			setMutex(n2, l);
+			n2.setMutex(this, l);
+			mutexPairs.add(new MutexPair(this, n2));
 		}
 	}
 
