@@ -28,10 +28,11 @@
 
 package javaff.data.strips;
 
-import javaff.data.Type;
-import java.util.Set;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.Set;
+
+import javaff.data.Type;
 
 public class EitherType extends Type
 {

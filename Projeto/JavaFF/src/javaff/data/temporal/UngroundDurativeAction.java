@@ -29,23 +29,23 @@
 
 package javaff.data.temporal;
 
-import javaff.data.PDDLPrinter;
-import javaff.data.strips.Operator;
-import javaff.data.strips.UngroundInstantAction;
-import javaff.data.strips.PredicateSymbol;
-import javaff.data.strips.AND;
-import javaff.data.strips.NOT;
-import javaff.data.strips.PDDLObject;
-import javaff.data.strips.Variable;
-import javaff.data.strips.Predicate;
-import javaff.data.strips.OperatorName;
-import javaff.data.Action;
-import javaff.data.UngroundCondition;
-import javaff.data.UngroundEffect;
-
+import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
-import java.util.Iterator;
+
+import javaff.data.Action;
+import javaff.data.PDDLPrinter;
+import javaff.data.UngroundCondition;
+import javaff.data.UngroundEffect;
+import javaff.data.strips.AND;
+import javaff.data.strips.NOT;
+import javaff.data.strips.Operator;
+import javaff.data.strips.OperatorName;
+import javaff.data.strips.PDDLObject;
+import javaff.data.strips.Predicate;
+import javaff.data.strips.PredicateSymbol;
+import javaff.data.strips.UngroundInstantAction;
+import javaff.data.strips.Variable;
 
 public class UngroundDurativeAction extends Operator
 {

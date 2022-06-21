@@ -28,12 +28,13 @@
 
 package javaff.data.strips;
 
-import javaff.data.PDDLPrinter;
-import javaff.data.PDDLPrintable;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Iterator;
 import java.io.PrintStream;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+
+import javaff.data.PDDLPrintable;
+import javaff.data.PDDLPrinter;
 
 public class PredicateSymbol implements PDDLPrintable
 {

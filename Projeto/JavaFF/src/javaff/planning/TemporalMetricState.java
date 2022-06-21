@@ -30,25 +30,24 @@
 
 package javaff.planning;
 
-import javaff.data.GroundCondition;
-import javaff.data.TotalOrderPlan;
-import javaff.data.Metric;
-import javaff.data.Action;
-import javaff.data.strips.InstantAction;
-import javaff.data.temporal.DurativeAction;
-import javaff.data.temporal.StartInstantAction;
-import javaff.data.temporal.SplitInstantAction;
-import javaff.scheduling.SchedulabilityChecker;
-import javaff.scheduling.VelosoSchedulabilityChecker;
-
-import java.util.Set;
-import java.util.HashSet;
-import java.util.List;
 import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.Map;
+import java.util.HashSet;
 import java.util.Hashtable;
 //import java.math.BigDecimal;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import javaff.data.Action;
+import javaff.data.GroundCondition;
+import javaff.data.Metric;
+import javaff.data.TotalOrderPlan;
+import javaff.data.strips.InstantAction;
+import javaff.data.temporal.SplitInstantAction;
+import javaff.data.temporal.StartInstantAction;
+import javaff.scheduling.SchedulabilityChecker;
+import javaff.scheduling.VelosoSchedulabilityChecker;
 
 public class TemporalMetricState extends MetricState
 {

@@ -28,20 +28,20 @@
 
 package javaff.data;
 
-import javaff.planning.STRIPSState;
-import javaff.planning.MetricState;
-import javaff.planning.TemporalMetricState;
-import javaff.planning.RelaxedPlanningGraph;
-import javaff.planning.RelaxedMetricPlanningGraph;
-import javaff.planning.RelaxedTemporalMetricPlanningGraph;
-import javaff.data.strips.InstantAction;
-import javaff.data.temporal.DurativeAction;
-
-import java.util.Set;
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Hashtable;
 import java.util.Iterator;
+import java.util.Map;
+import java.util.Set;
+
+import javaff.data.strips.InstantAction;
+import javaff.data.temporal.DurativeAction;
+import javaff.planning.MetricState;
+import javaff.planning.RelaxedMetricPlanningGraph;
+import javaff.planning.RelaxedPlanningGraph;
+import javaff.planning.RelaxedTemporalMetricPlanningGraph;
+import javaff.planning.STRIPSState;
+import javaff.planning.TemporalMetricState;
 
 public class GroundProblem
 {

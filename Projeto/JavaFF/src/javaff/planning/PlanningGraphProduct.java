@@ -1,12 +1,13 @@
 package javaff.planning;
 
 
-import java.util.Map;
-import java.util.Hashtable;
-import java.util.Set;
 import java.util.HashSet;
-import javaff.planning.PlanningGraph.PGProposition;
+import java.util.Hashtable;
+import java.util.Map;
+import java.util.Set;
+
 import javaff.data.strips.Proposition;
+import javaff.planning.PlanningGraph.PGProposition;
 
 public class PlanningGraphProduct {
 	private Map propositionMap = new Hashtable();

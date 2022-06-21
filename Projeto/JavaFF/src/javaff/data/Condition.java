@@ -28,8 +28,6 @@
 
 package javaff.data;
 
-import javaff.planning.State;
-
 public interface Condition extends PDDLPrintable
 {
 	public boolean isStatic();      // returns whether this condition is static

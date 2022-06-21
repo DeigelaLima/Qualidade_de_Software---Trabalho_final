@@ -28,19 +28,19 @@
 
 package javaff.data.metric;
 
-import javaff.data.PDDLPrinter;
-import javaff.planning.State;
-import javaff.planning.MetricState;
-import javaff.data.GroundEffect;
-import javaff.data.UngroundCondition;
-import javaff.data.strips.PredicateSymbol;
-import javaff.scheduling.MatrixSTN;
-
-import java.math.BigDecimal;
 import java.io.PrintStream;
-import java.util.Set;
+import java.math.BigDecimal;
 import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
+
+import javaff.data.GroundEffect;
+import javaff.data.PDDLPrinter;
+import javaff.data.UngroundCondition;
+import javaff.data.strips.PredicateSymbol;
+import javaff.planning.MetricState;
+import javaff.planning.State;
+import javaff.scheduling.MatrixSTN;
 
 public class ResourceOperator implements javaff.data.GroundEffect, javaff.data.UngroundEffect
 {

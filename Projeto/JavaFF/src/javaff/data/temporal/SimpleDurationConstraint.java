@@ -28,15 +28,14 @@
 
 package javaff.data.temporal;
 
-import javaff.data.metric.MetricSymbolStore;
-import javaff.data.metric.Function;
-import javaff.data.PDDLPrintable;
-import javaff.data.PDDLPrinter;
-import javaff.planning.MetricState;
-
-import java.util.Map;
 import java.io.PrintStream;
 import java.math.BigDecimal;
+import java.util.Map;
+
+import javaff.data.PDDLPrinter;
+import javaff.data.metric.Function;
+import javaff.data.metric.MetricSymbolStore;
+import javaff.planning.MetricState;
 
 public class SimpleDurationConstraint extends DurationConstraint
 {

@@ -163,33 +163,29 @@ public class PDDL21parser implements PDDL21parserConstants {
     if (jj_2_1(20)) {
       req = parseRequireDef();
     } else {
-      ;
     }
-         if (!req) {if (true) return false;}
+         boolean condition = !req && true;
+		if (condition)
+			return false;
     if (jj_2_2(20)) {
       parseTypeDef();
     } else {
-      ;
     }
     if (jj_2_3(20)) {
       parseConstantsDef();
     } else {
-      ;
     }
     if (jj_2_4(20)) {
       parsePredicatesDef();
     } else {
-      ;
     }
     if (jj_2_5(20)) {
       parseFunctionsDef();
     } else {
-      ;
     }
     label_1:
     while (true) {
       if (jj_2_6(20)) {
-        ;
       } else {
         break label_1;
       }
@@ -211,7 +207,6 @@ public class PDDL21parser implements PDDL21parserConstants {
     label_2:
     while (true) {
       if (jj_2_7(20)) {
-        ;
       } else {
         break label_2;
       }
@@ -242,7 +237,6 @@ public class PDDL21parser implements PDDL21parserConstants {
     label_3:
     while (true) {
       if (jj_2_10(20)) {
-        ;
       } else {
         break label_3;
       }
@@ -252,7 +246,6 @@ public class PDDL21parser implements PDDL21parserConstants {
         t = parsePrimitiveType();
           types.add(t);
         if (jj_2_11(20)) {
-          ;
         } else {
           break label_4;
         }
@@ -269,7 +262,6 @@ public class PDDL21parser implements PDDL21parserConstants {
     label_5:
     while (true) {
       if (jj_2_12(20)) {
-        ;
       } else {
         break label_5;
       }
@@ -317,7 +309,6 @@ public class PDDL21parser implements PDDL21parserConstants {
       st = parsePrimitiveType();
                                                      et.addType(st);
       if (jj_2_15(20)) {
-        ;
       } else {
         break label_6;
       }
@@ -349,7 +340,6 @@ public class PDDL21parser implements PDDL21parserConstants {
         }
       strings.add(t.toString());
         if (jj_2_18(20)) {
-          ;
         } else {
           break label_7;
         }
@@ -369,7 +359,6 @@ public class PDDL21parser implements PDDL21parserConstants {
       label_8:
       while (true) {
         if (jj_2_19(20)) {
-          ;
         } else {
           break label_8;
         }
@@ -418,7 +407,6 @@ public class PDDL21parser implements PDDL21parserConstants {
     while (true) {
       parsePredicate();
       if (jj_2_23(20)) {
-        ;
       } else {
         break label_9;
       }
@@ -511,14 +499,12 @@ public class PDDL21parser implements PDDL21parserConstants {
       c = parseGD(varMap, false);
                                                   a.condition = (UngroundCondition) c;
     } else {
-      ;
     }
     if (jj_2_27(20)) {
       jj_consume_token(EFFECT);
       e = parseEffect(varMap);
                                          a.effect = (UngroundEffect) e;
     } else {
-      ;
     }
   }
 
@@ -546,7 +532,6 @@ public class PDDL21parser implements PDDL21parserConstants {
       label_10:
       while (true) {
         if (jj_2_28(20)) {
-          ;
         } else {
           break label_10;
         }
@@ -609,7 +594,6 @@ public class PDDL21parser implements PDDL21parserConstants {
       label_11:
       while (true) {
         if (jj_2_33(20)) {
-          ;
         } else {
           break label_11;
         }
@@ -670,7 +654,6 @@ public class PDDL21parser implements PDDL21parserConstants {
     while (true) {
       parseFunctionSkeleton();
       if (jj_2_40(20)) {
-        ;
       } else {
         break label_12;
       }
@@ -714,7 +697,8 @@ public class PDDL21parser implements PDDL21parserConstants {
 // **********************************
   final public BinaryComparator parseFComp(Map varMap) throws ParseException {
         Token t1;
-        Function f1, f2;
+        Function f1;
+		Function f2;
     jj_consume_token(OPEN);
     t1 = jj_consume_token(BINARY_COMP);
     f1 = parseFExp(varMap);
@@ -727,7 +711,8 @@ public class PDDL21parser implements PDDL21parserConstants {
 
   final public Function parseFExp(Map varMap) throws ParseException {
         Token t1;
-        Function f1, f2;
+        Function f1;
+		Function f2;
     if (jj_2_41(20)) {
       t1 = jj_consume_token(NUMBER);
                         {if (true) return new NumberFunction(Double.parseDouble(t1.toString()));}
@@ -788,13 +773,11 @@ public class PDDL21parser implements PDDL21parserConstants {
       if (jj_2_46(20)) {
         jj_consume_token(OPEN);
       } else {
-        ;
       }
       jj_consume_token(TOTAL_TIME);
       if (jj_2_47(20)) {
         jj_consume_token(CLOSE);
       } else {
-        ;
       }
                                              {if (true) return TotalTimeFunction.getInstance();}
     } else if (jj_2_50(20)) {
@@ -881,7 +864,6 @@ public class PDDL21parser implements PDDL21parserConstants {
       while (true) {
         parseTimedGD(da, varMap);
         if (jj_2_51(20)) {
-          ;
         } else {
           break label_13;
         }
@@ -934,7 +916,6 @@ public class PDDL21parser implements PDDL21parserConstants {
         sdc = parseSimpleDurationConstraint(da, varMap);
                 dc.add(sdc);
         if (jj_2_57(20)) {
-          ;
         } else {
           break label_14;
         }
@@ -993,7 +974,6 @@ public class PDDL21parser implements PDDL21parserConstants {
       label_15:
       while (true) {
         if (jj_2_62(20)) {
-          ;
         } else {
           break label_15;
         }
@@ -1053,7 +1033,8 @@ public class PDDL21parser implements PDDL21parserConstants {
 
   final public Function parseFExpDA(UngroundDurativeAction da, Map varMap) throws ParseException {
         Token t1;
-        Function f1, f2;
+        Function f1;
+		Function f2;
     if (jj_2_69(20)) {
       t1 = jj_consume_token(NUMBER);
                         {if (true) return new NumberFunction(Double.parseDouble(t1.toString()));}
@@ -1099,7 +1080,8 @@ public class PDDL21parser implements PDDL21parserConstants {
 // *																			*
 // ******************************************************************************
   final public boolean parseProblem() throws ParseException {
-    Token t, t2;
+    Token t;
+	Token t2;
     jj_consume_token(OPEN);
     jj_consume_token(DEFINE);
     jj_consume_token(OPEN);
@@ -1117,19 +1099,16 @@ public class PDDL21parser implements PDDL21parserConstants {
     if (jj_2_75(20)) {
       parseRequireDef();
     } else {
-      ;
     }
     if (jj_2_76(20)) {
       parseObjectDeclaration();
     } else {
-      ;
     }
     parseInit();
     parseGoal();
     if (jj_2_77(20)) {
       parseMetric();
     } else {
-      ;
     }
     jj_consume_token(CLOSE);
     jj_consume_token(0);
@@ -1166,7 +1145,6 @@ public class PDDL21parser implements PDDL21parserConstants {
     while (true) {
       parseInitEl();
       if (jj_2_78(20)) {
-        ;
       } else {
         break label_16;
       }
@@ -1230,8 +1208,8 @@ public class PDDL21parser implements PDDL21parserConstants {
   final public int parseOptimization() throws ParseException {
         Token t1;
     t1 = jj_consume_token(OPTIMIZATION);
-                if (t1.toString().equals("minimize")) {if (true) return Metric.MINIMIZE;}
-                else if (t1.toString().equals("maximize")) {if (true) return Metric.MAXIMIZE;}
+                if ("minimize".equals(t1.toString())) {if (true) return Metric.MINIMIZE;}
+                else if ("maximize".equals(t1.toString())) {if (true) return Metric.MAXIMIZE;}
                 else {if (true) return -1;}
     throw new Error("Missing return statement in function");
   }
@@ -2772,9 +2750,11 @@ public class PDDL21parser implements PDDL21parserConstants {
 
   public PDDL21parserTokenManager token_source;
   SimpleCharStream jj_input_stream;
-  public Token token, jj_nt;
+  public Token token;
+public Token jj_nt;
   private int jj_ntk;
-  private Token jj_scanpos, jj_lastpos;
+  private Token jj_scanpos;
+private Token jj_lastpos;
   private int jj_la;
   public boolean lookingAhead = false;
   private boolean jj_semLA;

@@ -28,14 +28,14 @@
 
 package javaff.data.strips;
 
-import javaff.data.Action;
-import javaff.data.UngroundCondition;
-import javaff.data.UngroundEffect;
-import javaff.data.PDDLPrinter;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
-import java.util.HashSet;
+
+import javaff.data.Action;
+import javaff.data.PDDLPrinter;
+import javaff.data.UngroundCondition;
+import javaff.data.UngroundEffect;
 
 public class UngroundInstantAction extends Operator
 {

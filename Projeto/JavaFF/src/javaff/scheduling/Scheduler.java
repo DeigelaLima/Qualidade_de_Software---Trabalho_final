@@ -28,8 +28,8 @@
 
 package javaff.scheduling;
 
-import javaff.data.TotalOrderPlan;
 import javaff.data.TimeStampedPlan;
+import javaff.data.TotalOrderPlan;
 
 public interface Scheduler
 {

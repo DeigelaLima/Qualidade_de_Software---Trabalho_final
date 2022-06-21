@@ -28,9 +28,9 @@
 
 package javaff.data;
 
-import java.util.Set;
 import java.io.PrintStream;
 import java.io.PrintWriter;
+import java.util.Set;
 
 public interface Plan extends Cloneable
 {

@@ -28,16 +28,16 @@
 
 package javaff.planning;
 
-import javaff.data.GroundCondition;
-import javaff.data.TotalOrderPlan;
-import javaff.data.Metric;
-import javaff.data.metric.NamedFunction;
-
-import java.util.Set;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Hashtable;
 import java.math.BigDecimal;
+import java.util.HashSet;
+import java.util.Hashtable;
+import java.util.Map;
+import java.util.Set;
+
+import javaff.data.GroundCondition;
+import javaff.data.Metric;
+import javaff.data.TotalOrderPlan;
+import javaff.data.metric.NamedFunction;
 
 public class MetricState extends STRIPSState
 {

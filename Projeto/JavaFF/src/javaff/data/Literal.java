@@ -28,11 +28,12 @@
 
 package javaff.data;
 
-import javaff.data.strips.PredicateSymbol;
-import java.util.List;
+import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.io.PrintStream;
+import java.util.List;
+
+import javaff.data.strips.PredicateSymbol;
 
 public abstract class Literal implements Condition, Effect
 {

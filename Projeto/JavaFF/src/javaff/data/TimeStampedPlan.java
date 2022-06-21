@@ -28,14 +28,14 @@
 
 package javaff.data;
 
-import java.util.Set;
-import java.util.HashSet;
-import java.util.SortedSet;
-import java.util.TreeSet;
-import java.util.Iterator;
 import java.io.PrintStream;
 import java.io.PrintWriter;
 import java.math.BigDecimal;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Set;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 public class TimeStampedPlan implements Plan
 {

@@ -28,18 +28,18 @@
 
 package javaff.scheduling;
 
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Set;
+
 import javaff.data.strips.InstantAction;
+import javaff.data.temporal.EndInstantAction;
 import javaff.data.temporal.SplitInstantAction;
 import javaff.data.temporal.StartInstantAction;
-import javaff.data.temporal.EndInstantAction;
 import javaff.planning.TemporalMetricState;
-
-import java.util.Set;
-import java.util.HashSet;
-import java.util.List;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.math.BigDecimal;
 
 public class VelosoSchedulabilityChecker implements SchedulabilityChecker, Cloneable 
 {
@@ -160,11 +160,14 @@ public class VelosoSchedulabilityChecker implements SchedulabilityChecker, Clone
 
 	private class EnvelopeEntry implements Cloneable
     {
-		public InstantAction start, end;
-		public List followsStart, precedesEnd;
+		public InstantAction start;
+		public InstantAction end;
+		public List followsStart;
+		public List precedesEnd;
 		public Set constraints;
 		public SimpleTemporalNetwork stn;
-		BigDecimal maxEnv, minEnv;
+		BigDecimal maxEnv;
+		BigDecimal minEnv;
 
 		public EnvelopeEntry(StartInstantAction s, TemporalMetricState tms)
 		{

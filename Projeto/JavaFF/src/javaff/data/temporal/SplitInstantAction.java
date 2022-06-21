@@ -28,8 +28,8 @@
 
 package javaff.data.temporal;
 
-import javaff.data.strips.Proposition;
 import javaff.data.strips.InstantAction;
+import javaff.data.strips.Proposition;
 import javaff.planning.TemporalMetricState;
 
 public abstract class SplitInstantAction extends InstantAction

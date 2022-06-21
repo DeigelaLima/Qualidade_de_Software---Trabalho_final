@@ -29,13 +29,14 @@
 package javaff.data.strips;
 
 
-import javaff.data.GroundCondition;
-import javaff.data.GroundEffect;
-import javaff.planning.State;
-import javaff.planning.STRIPSState;
-import java.util.Set;
 import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
+
+import javaff.data.GroundCondition;
+import javaff.data.GroundEffect;
+import javaff.planning.STRIPSState;
+import javaff.planning.State;
 
 public class Proposition extends javaff.data.Literal implements GroundCondition, GroundEffect
 {

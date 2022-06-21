@@ -28,16 +28,17 @@
 
 package javaff.data.strips;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Hashtable;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
 import javaff.data.Action;
 import javaff.data.UngroundProblem;
-import java.util.Arrays;
-import java.util.Map;
-import java.util.Hashtable;
-import java.util.List;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.Set;
-import java.util.HashSet;
 
 public abstract class Operator implements javaff.data.PDDLPrintable
 {
@@ -149,10 +150,9 @@ public abstract class Operator implements javaff.data.PDDLPrintable
 						PDDLObject arg = (PDDLObject) propargit.next();
 						Variable k = (Variable) p.getParameters().get(counter);
 						int i = params.indexOf(k);
-						if (i >=0 && set[i])
-						{
-							if (!c.get(i).equals(arg)) ok = false;
-						}
+						boolean condition = i >=0 && set[i] && !c.get(i).equals(arg);
+						if (condition)
+							ok = false;
 						counter ++;
 					}
 					//if so, duplicate it and put it in and put it in newcombs

@@ -28,9 +28,9 @@
 
 package javaff.data;
 
-import javaff.data.metric.Function;
-
 import java.io.PrintStream;
+
+import javaff.data.metric.Function;
 
 public class Metric implements PDDLPrintable
 {

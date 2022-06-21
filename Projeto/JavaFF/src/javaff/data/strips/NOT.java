@@ -28,19 +28,18 @@
 
 package javaff.data.strips;
 
-import javaff.data.Literal;
-import javaff.data.PDDLPrinter;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
+
 import javaff.data.CompoundLiteral;
 import javaff.data.GroundEffect;
-import javaff.data.UngroundEffect;
+import javaff.data.Literal;
+import javaff.data.PDDLPrinter;
 import javaff.data.UngroundCondition;
-import javaff.planning.State;
+import javaff.data.UngroundEffect;
 import javaff.planning.STRIPSState;
-
-import java.util.Map;
-import java.util.HashSet;
-import java.util.Set;
-import java.io.PrintStream;
+import javaff.planning.State;
 
 public class NOT implements CompoundLiteral, GroundEffect, UngroundEffect
 {

@@ -28,21 +28,21 @@
 
 package javaff.data.strips;
 
-import javaff.data.Literal;
+import java.io.PrintStream;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Set;
+
+import javaff.data.CompoundLiteral;
+import javaff.data.Condition;
 import javaff.data.GroundCondition;
 import javaff.data.GroundEffect;
-import javaff.data.Condition;
+import javaff.data.Literal;
+import javaff.data.PDDLPrinter;
 import javaff.data.UngroundCondition;
 import javaff.data.UngroundEffect;
-import javaff.data.CompoundLiteral;
-import javaff.data.PDDLPrinter;
 import javaff.planning.State;
-
-import java.util.Set;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Iterator;
-import java.io.PrintStream;
 
 public class AND implements CompoundLiteral, GroundCondition, GroundEffect, UngroundCondition, UngroundEffect
 {

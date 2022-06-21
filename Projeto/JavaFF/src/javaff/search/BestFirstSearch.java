@@ -28,11 +28,12 @@
 
 package javaff.search;
 
-import javaff.planning.State;
-import javaff.planning.Filter;
 import java.util.Comparator;
-import java.util.TreeSet;
 import java.util.Hashtable;
+import java.util.TreeSet;
+
+import javaff.planning.Filter;
+import javaff.planning.State;
 
 
 public class BestFirstSearch extends Search

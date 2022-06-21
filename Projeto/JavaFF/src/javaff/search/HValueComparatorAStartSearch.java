@@ -28,9 +28,10 @@
 
 package javaff.search;
 
-import javaff.planning.State;
-import java.util.Comparator;
 import java.math.BigDecimal;
+import java.util.Comparator;
+
+import javaff.planning.State;
 
 public class HValueComparatorAStartSearch implements Comparator
 {

@@ -28,9 +28,9 @@
 
 package javaff.scheduling;
 
-import javaff.data.strips.InstantAction;
-
 import java.util.Set;
+
+import javaff.data.strips.InstantAction;
 
 public interface SimpleTemporalNetwork
 {

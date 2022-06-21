@@ -28,14 +28,14 @@
 
 package javaff.data.temporal;
 
+import java.math.BigDecimal;
+import java.util.Map;
+
 import javaff.data.metric.Function;
 import javaff.data.metric.NamedFunction;
 import javaff.data.metric.NumberFunction;
 import javaff.planning.MetricState;
 import javaff.scheduling.MatrixSTN;
-
-import java.util.Map;
-import java.math.BigDecimal;
 
 public class DurationFunction extends NamedFunction
 {

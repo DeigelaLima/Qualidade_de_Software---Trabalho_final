@@ -28,16 +28,16 @@
 
 package javaff.data.temporal;
 
+import java.io.PrintStream;
+import java.math.BigDecimal;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Set;
+
 import javaff.data.PDDLPrintable;
 import javaff.data.PDDLPrinter;
 import javaff.planning.MetricState;
-
-import java.math.BigDecimal;
-import java.util.Map;
-import java.util.Set;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.io.PrintStream;
 
 public class DurationConstraint implements PDDLPrintable
 {

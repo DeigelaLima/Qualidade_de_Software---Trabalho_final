@@ -28,9 +28,9 @@
 
 package javaff.planning;
 
-import javaff.data.GroundProblem;
-
 import java.util.Set;
+
+import javaff.data.GroundProblem;
 
 public class RelaxedPlanningGraph extends PlanningGraph
 {

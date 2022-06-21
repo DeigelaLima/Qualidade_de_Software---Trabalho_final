@@ -28,21 +28,18 @@
 
 package javaff.data;
 
-import javaff.data.strips.SimpleType;
-import javaff.data.strips.PredicateSymbol;
-import javaff.data.strips.Predicate;
-import javaff.data.strips.PDDLObject;
-import javaff.data.strips.Proposition;
-import javaff.data.strips.Operator;
-import javaff.data.strips.Variable;
-import javaff.data.metric.FunctionSymbol;
-import javaff.data.metric.NamedFunction;
-
-import java.util.Set;
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Hashtable;
 import java.util.Iterator;
+import java.util.Map;
+import java.util.Set;
+
+import javaff.data.metric.FunctionSymbol;
+import javaff.data.strips.Operator;
+import javaff.data.strips.PDDLObject;
+import javaff.data.strips.PredicateSymbol;
+import javaff.data.strips.Proposition;
+import javaff.data.strips.SimpleType;
 
 public class UngroundProblem
 {

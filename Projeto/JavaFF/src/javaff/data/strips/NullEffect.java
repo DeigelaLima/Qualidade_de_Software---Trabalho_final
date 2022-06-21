@@ -28,16 +28,16 @@
 
 package javaff.data.strips;
 
-import javaff.data.PDDLPrinter;
-import javaff.data.UngroundEffect;
-import javaff.data.GroundEffect;
-import javaff.data.UngroundCondition;
-import javaff.planning.State;
-
+import java.io.PrintStream;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
-import java.util.HashSet;
-import java.io.PrintStream;
+
+import javaff.data.GroundEffect;
+import javaff.data.PDDLPrinter;
+import javaff.data.UngroundCondition;
+import javaff.data.UngroundEffect;
+import javaff.planning.State;
 
 public class NullEffect implements UngroundEffect, GroundEffect
 {

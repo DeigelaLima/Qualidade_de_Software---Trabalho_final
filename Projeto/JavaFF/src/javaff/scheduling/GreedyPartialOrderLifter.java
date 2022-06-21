@@ -28,16 +28,16 @@
 
 package javaff.scheduling;
 
-import javaff.data.TotalOrderPlan;
-import javaff.data.PartialOrderPlan;
-import javaff.data.GroundProblem;
-import javaff.data.Action;
-import javaff.data.strips.Proposition;
-
-import java.util.Set;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.ListIterator;
+import java.util.Set;
+
+import javaff.data.Action;
+import javaff.data.GroundProblem;
+import javaff.data.PartialOrderPlan;
+import javaff.data.TotalOrderPlan;
+import javaff.data.strips.Proposition;
 
 public class GreedyPartialOrderLifter implements PartialOrderLifter
 {

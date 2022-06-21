@@ -28,35 +28,25 @@
 
 package javaff;
 
-import javaff.data.PDDLPrinter;
-import javaff.data.UngroundProblem;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.PrintStream;
+import java.io.PrintWriter;
+import java.math.BigDecimal;
+import java.security.SecureRandom;
+import java.util.Random;
+
 import javaff.data.GroundProblem;
 import javaff.data.Plan;
 import javaff.data.TotalOrderPlan;
-import javaff.data.TimeStampedPlan;
+import javaff.data.UngroundProblem;
 import javaff.parser.PDDL21parser;
+import javaff.planning.NullFilter;
 import javaff.planning.State;
 import javaff.planning.TemporalMetricState;
-import javaff.planning.RelaxedTemporalMetricPlanningGraph;
-import javaff.planning.HelpfulFilter;
-import javaff.planning.NullFilter;
-import javaff.scheduling.Scheduler;
-import javaff.scheduling.JavaFFScheduler;
-import javaff.search.BreadthFirstSearch;
-import javaff.search.Search;
 import javaff.search.AStarSearch;
-import javaff.search.BestFirstSearch;
-import javaff.search.EnforcedHillClimbingSearch;
-
-
-import java.io.PrintStream;
-import java.io.PrintWriter;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.math.BigDecimal;
-import java.util.Random;
 
 public class JavaFF
 {
@@ -75,7 +65,7 @@ public class JavaFF
 		EPSILON = EPSILON.setScale(2,BigDecimal.ROUND_HALF_EVEN);
 		MAX_DURATION = MAX_DURATION.setScale(2,BigDecimal.ROUND_HALF_EVEN);
 		
-		generator = new Random();
+		generator = new SecureRandom();
 		
 		if (args.length < 2) {
 			System.out.println("Parameters needed: domainFile.pddl problemFile.pddl [random seed] [outputfile.sol");
@@ -86,7 +76,8 @@ public class JavaFF
 			File solutionFile = null;
 			if (args.length > 2)
 			{
-				generator = new Random(Integer.parseInt(args[2]));
+				generator = new SecureRandom();
+				generator.setSeed(Integer.parseInt(args[2]));
 			}
 	
 			if (args.length > 3)

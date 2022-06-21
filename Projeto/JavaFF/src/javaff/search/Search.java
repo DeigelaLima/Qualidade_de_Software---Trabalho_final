@@ -29,12 +29,9 @@
 
 package javaff.search;
 
-import javaff.planning.State;
-
 import java.util.Comparator;
-import java.util.Collection;
-import java.util.Map;
-import java.util.Hashtable;
+
+import javaff.planning.State;
 
 public abstract class Search
 {

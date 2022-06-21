@@ -28,8 +28,9 @@
 
 package javaff.data;
 
-import javaff.data.strips.SimpleType;
 import java.io.PrintStream;
+
+import javaff.data.strips.SimpleType;
 
 public abstract class Parameter implements PDDLPrintable
 {

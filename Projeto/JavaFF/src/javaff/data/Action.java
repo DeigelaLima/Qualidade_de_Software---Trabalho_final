@@ -28,15 +28,15 @@
 
 package javaff.data;
 
-import javaff.data.strips.OperatorName;
-import javaff.planning.State;
-
-import java.util.Set;
-import java.util.List;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
-import java.math.BigDecimal;
+import java.util.Set;
+
+import javaff.data.strips.OperatorName;
+import javaff.planning.State;
 
 public abstract class Action
 {

@@ -28,24 +28,24 @@
 
 package javaff.planning;
 
-import javaff.data.GroundProblem;
-import javaff.data.GroundCondition;
-import javaff.data.metric.MetricSymbolStore;
-import javaff.data.metric.NamedFunction;
-import javaff.data.metric.BinaryComparator;
-import javaff.data.metric.ResourceOperator;
-import javaff.data.metric.Function;
-import javaff.data.metric.BinaryFunction;
-import javaff.data.metric.NumberFunction;
-
 import java.math.BigDecimal;
-import java.util.Set;
-import java.util.HashSet;
-import java.util.List;
 import java.util.ArrayList;
-import java.util.Map;
+import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import javaff.data.GroundCondition;
+import javaff.data.GroundProblem;
+import javaff.data.metric.BinaryComparator;
+import javaff.data.metric.BinaryFunction;
+import javaff.data.metric.Function;
+import javaff.data.metric.MetricSymbolStore;
+import javaff.data.metric.NamedFunction;
+import javaff.data.metric.NumberFunction;
+import javaff.data.metric.ResourceOperator;
 
 public class RelaxedMetricPlanningGraph extends RelaxedPlanningGraph
 {
@@ -478,7 +478,8 @@ public class RelaxedMetricPlanningGraph extends RelaxedPlanningGraph
 
 	protected class PGBinaryFunction implements PGFunction
 	{
-		public PGFunction first, second;
+		public PGFunction first;
+		public PGFunction second;
 		public int type;
 		public PGBinaryFunction(PGFunction f, PGFunction s, int t)
 		{
@@ -589,7 +590,8 @@ public class RelaxedMetricPlanningGraph extends RelaxedPlanningGraph
 
 	protected class PGBinaryComparator
 	{
-		public PGFunction left, right;
+		public PGFunction left;
+		public PGFunction right;
 		public int type;
 
 		public PGBinaryComparator(PGFunction l, PGFunction r, int t)

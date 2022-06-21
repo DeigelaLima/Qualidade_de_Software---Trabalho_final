@@ -28,11 +28,11 @@
 
 package javaff.data.metric;
 
-import javaff.scheduling.MatrixSTN;
-import javaff.planning.MetricState;
-
 import java.math.BigDecimal;
 import java.util.Map;
+
+import javaff.planning.MetricState;
+import javaff.scheduling.MatrixSTN;
 
 public class NumberFunction implements Function
 {

@@ -28,13 +28,14 @@
 
 package javaff.planning;
 
+import java.math.BigDecimal;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Set;
+
 import javaff.data.Action;
 import javaff.data.GroundCondition;
 import javaff.data.Plan;
-import java.math.BigDecimal;
-import java.util.Set;
-import java.util.HashSet;
-import java.util.Iterator;
 
 public abstract class State implements Cloneable
 {

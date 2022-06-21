@@ -28,16 +28,16 @@
 
 package javaff.data.temporal;
 
+import java.math.BigDecimal;
+import java.util.Map;
+import java.util.Set;
+
 import javaff.data.Action;
 import javaff.data.GroundCondition;
 import javaff.data.GroundEffect;
 import javaff.data.strips.Proposition;
-import javaff.planning.State;
 import javaff.planning.MetricState;
-
-import java.util.Set;
-import java.util.Map;
-import java.math.BigDecimal;
+import javaff.planning.State;
 
 public class DurativeAction extends Action
 {

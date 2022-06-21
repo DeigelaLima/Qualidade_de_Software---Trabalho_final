@@ -28,15 +28,15 @@
 
 package javaff.data.metric;
 
-import javaff.data.strips.Variable;
-import javaff.data.strips.PredicateSymbol;
+import java.math.BigDecimal;
+import java.util.Iterator;
+import java.util.Map;
+
 import javaff.data.strips.PDDLObject;
+import javaff.data.strips.PredicateSymbol;
+import javaff.data.strips.Variable;
 import javaff.planning.MetricState;
 import javaff.scheduling.MatrixSTN;
-
-import java.math.BigDecimal;
-import java.util.Map;
-import java.util.Iterator;
 
 public class NamedFunction extends javaff.data.Literal implements Function
 {

@@ -28,10 +28,11 @@
 
 package javaff.planning;
 
-import javaff.data.Action;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
-import java.util.HashSet;
+
+import javaff.data.Action;
 
 public class NullFilter implements Filter
 {

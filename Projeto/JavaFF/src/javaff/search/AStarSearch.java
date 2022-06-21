@@ -31,6 +31,7 @@ package javaff.search;
 import java.util.Comparator;
 import java.util.Hashtable;
 import java.util.TreeSet;
+
 import javaff.planning.Filter;
 import javaff.planning.State;
 

@@ -28,12 +28,13 @@
 
 package javaff.data.strips;
 
+import java.util.Map;
+import java.util.Set;
+
+import javaff.data.Action;
 import javaff.data.GroundCondition;
 import javaff.data.GroundEffect;
-import javaff.data.Action;
 import javaff.planning.State;
-import java.util.Set;
-import java.util.Map;
 
 public abstract class InstantAction extends Action
 {

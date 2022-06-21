@@ -28,18 +28,18 @@
 
 package javaff.data;
 
-import javaff.data.strips.Proposition;
-import javaff.data.strips.InstantAction;
-import javaff.data.temporal.SplitInstantAction;
-import javaff.scheduling.TemporalConstraint;
-
-import java.util.Map;
-import java.util.Hashtable;
-import java.util.Set;
-import java.util.HashSet;
-import java.util.Iterator;
 import java.io.PrintStream;
 import java.io.PrintWriter;
+import java.util.HashSet;
+import java.util.Hashtable;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Set;
+
+import javaff.data.strips.InstantAction;
+import javaff.data.strips.Proposition;
+import javaff.data.temporal.SplitInstantAction;
+import javaff.scheduling.TemporalConstraint;
 
 
 public class PartialOrderPlan implements Plan

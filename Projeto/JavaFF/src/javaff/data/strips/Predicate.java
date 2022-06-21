@@ -28,15 +28,16 @@
 
 package javaff.data.strips;
 
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Set;
+
+import javaff.data.GroundCondition;
+import javaff.data.GroundEffect;
 import javaff.data.Literal;
 import javaff.data.UngroundCondition;
 import javaff.data.UngroundEffect;
-import javaff.data.GroundCondition;
-import javaff.data.GroundEffect;
-import java.util.Map;
-import java.util.Set;
-import java.util.HashSet;
-import java.util.Iterator;
 
 public class Predicate extends Literal implements UngroundCondition, UngroundEffect
 {

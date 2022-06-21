@@ -28,13 +28,12 @@
 
 package javaff.data;
 
-import javaff.data.strips.Operator;
-import javaff.data.metric.NamedFunction;
 import java.io.PrintStream;
 import java.util.Collection;
 import java.util.Iterator;
-import java.util.Set;
-import java.util.HashSet;
+
+import javaff.data.metric.NamedFunction;
+import javaff.data.strips.Operator;
 
 public abstract class PDDLPrinter
 {

@@ -28,11 +28,11 @@
 
 package javaff.search;
 
-import javaff.planning.State;
-import javaff.planning.Filter;
-import java.util.Comparator;
 import java.util.Hashtable;
 import java.util.LinkedList;
+
+import javaff.planning.Filter;
+import javaff.planning.State;
 
 public class BreadthFirstSearch extends Search
 {

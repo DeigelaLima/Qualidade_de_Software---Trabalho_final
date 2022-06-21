@@ -28,9 +28,10 @@
 
 package javaff.data;
 
-import javaff.planning.State;
-import java.util.Set;
 import java.util.Map;
+import java.util.Set;
+
+import javaff.planning.State;
 
 public interface GroundEffect extends Effect
 {

@@ -28,14 +28,10 @@
 
 package javaff.search;
 
-import javaff.planning.State;
-import java.util.Set;
-import java.util.SortedSet;
-import java.util.TreeSet;
-import java.util.LinkedList;
-import java.util.Comparator;
-import java.util.Iterator;
 import java.math.BigDecimal;
+import java.util.Comparator;
+
+import javaff.planning.State;
 
 public class LimitedEnforcedHillClimbingSearch extends EnforcedHillClimbingSearch
 {

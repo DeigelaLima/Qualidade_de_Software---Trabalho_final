@@ -28,20 +28,20 @@
 
 package javaff.planning;
 
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Hashtable;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
 import javaff.data.Action;
-import javaff.data.GroundProblem;
 import javaff.data.GroundCondition;
+import javaff.data.GroundProblem;
 import javaff.data.Plan;
 import javaff.data.TotalOrderPlan;
 import javaff.data.strips.Proposition;
-
-import java.util.List;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.Set;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Hashtable;
 
 public class PlanningGraph
 {
@@ -50,8 +50,10 @@ public class PlanningGraph
 
 	Set actions = new HashSet();
 
-	Set initial, goal;
-	Set propMutexes, actionMutexes;
+	Set initial;
+	Set goal;
+	Set propMutexes;
+	Set actionMutexes;
 	List memorised;
 
 	protected Set readyActions = null; // PGActions that have all their propositions met, but not their PGBinaryComparators or preconditions are mutex
@@ -645,7 +647,8 @@ public class PlanningGraph
 	protected class PGAction extends Node
     {
 		public Action action;
-		public int counter, difficulty;
+		public int counter;
+		public int difficulty;
 
 		public Set conditions = new HashSet();
 		public Set achieves = new HashSet();
@@ -689,7 +692,6 @@ public class PlanningGraph
 			Iterator p1it = this.deletes.iterator();
 			while (p1it.hasNext()) {
 				PGProposition p1 = (PGProposition) p1it.next();
-				;
 				if (a2.achieves.contains(p1))
 					return true;
 				if (a2.conditions.contains(p1))
@@ -783,7 +785,8 @@ public class PlanningGraph
 
 	protected class MutexPair
 	{
-		public Node node1, node2;
+		public Node node1;
+		public Node node2;
 		public MutexPair(Node n1, Node n2)
 		{
 			node1 = n1;

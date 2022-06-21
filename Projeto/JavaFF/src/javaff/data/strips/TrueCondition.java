@@ -28,15 +28,15 @@
 
 package javaff.data.strips;
 
-import javaff.data.PDDLPrinter;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
+
 import javaff.data.GroundCondition;
+import javaff.data.PDDLPrinter;
 import javaff.data.UngroundCondition;
 import javaff.data.UngroundEffect;
 import javaff.planning.State;
-import java.util.Map;
-import java.util.Set;
-import java.util.HashSet;
-import java.io.PrintStream;
 
 public class TrueCondition implements GroundCondition, UngroundCondition
 {

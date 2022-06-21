@@ -28,8 +28,9 @@
 
 package javaff.data;
 
-import javaff.data.strips.RootType;
 import java.io.PrintStream;
+
+import javaff.data.strips.RootType;
 
 public abstract class Type implements PDDLPrintable
 {

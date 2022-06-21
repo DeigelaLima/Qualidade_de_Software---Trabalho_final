@@ -54,20 +54,20 @@ public abstract class MetricSymbolStore
 
 	public static int getType(String s)
 	{
-		if (s.equals(">")) return GREATER_THAN;
-		else if (s.equals(">=")) return GREATER_THAN_EQUAL;
-		else if (s.equals("<")) return LESS_THAN;
-		else if (s.equals("<=")) return LESS_THAN_EQUAL;
-		else if (s.equals("=")) return EQUAL;
-		else if (s.equals("+")) return PLUS;
-		else if (s.equals("-")) return MINUS;
-		else if (s.equals("*")) return MULTIPLY;
-		else if (s.equals("/")) return DIVIDE;
-		else if (s.equals("assign") || s.equals(":=")) return ASSIGN;
-		else if (s.equals("increase") || s.equals("+=")) return INCREASE;
-		else if (s.equals("decrease") || s.equals("-=")) return DECREASE;
-		else if (s.equals("scale-up") || s.equals("*=")) return SCALE_UP;
-        else if (s.equals("scale-down") || s.equals("/=")) return SCALE_DOWN;
+		if (">".equals(s)) return GREATER_THAN;
+		else if (">=".equals(s)) return GREATER_THAN_EQUAL;
+		else if ("<".equals(s)) return LESS_THAN;
+		else if ("<=".equals(s)) return LESS_THAN_EQUAL;
+		else if ("=".equals(s)) return EQUAL;
+		else if ("+".equals(s)) return PLUS;
+		else if ("-".equals(s)) return MINUS;
+		else if ("*".equals(s)) return MULTIPLY;
+		else if ("/".equals(s)) return DIVIDE;
+		else if ("assign".equals(s) || ":=".equals(s)) return ASSIGN;
+		else if ("increase".equals(s) || "+=".equals(s)) return INCREASE;
+		else if ("decrease".equals(s) || "-=".equals(s)) return DECREASE;
+		else if ("scale-up".equals(s) || "*=".equals(s)) return SCALE_UP;
+        else if ("scale-down".equals(s) || "/=".equals(s)) return SCALE_DOWN;
 		else return -1;
 	}
 

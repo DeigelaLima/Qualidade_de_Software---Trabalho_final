@@ -28,27 +28,27 @@
 
 package javaff.scheduling;
 
-import javaff.data.TotalOrderPlan;
+import java.math.BigDecimal;
+import java.util.HashSet;
+import java.util.Hashtable;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+
+import javaff.data.Action;
+import javaff.data.GroundProblem;
+import javaff.data.Metric;
 import javaff.data.PartialOrderPlan;
 import javaff.data.TimeStampedPlan;
-import javaff.data.GroundProblem;
-import javaff.data.Action;
-import javaff.data.Metric;
+import javaff.data.TotalOrderPlan;
 import javaff.data.metric.BinaryComparator;
-import javaff.data.metric.ResourceOperator;
-import javaff.data.metric.NumberFunction;
-import javaff.data.metric.NamedFunction;
 import javaff.data.metric.MetricSymbolStore;
+import javaff.data.metric.NamedFunction;
+import javaff.data.metric.NumberFunction;
+import javaff.data.metric.ResourceOperator;
 import javaff.data.metric.TotalTimeFunction;
 import javaff.data.temporal.StartInstantAction;
 import javaff.planning.TemporalMetricState;
-
-import java.util.Iterator;
-import java.util.List;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Hashtable;
-import java.math.BigDecimal;
 
 public class JavaFFScheduler implements Scheduler
 {

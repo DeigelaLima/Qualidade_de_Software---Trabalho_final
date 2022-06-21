@@ -28,22 +28,23 @@
 
 package javaff.data.metric;
 
-import javaff.planning.State;
-import javaff.planning.MetricState;
-import javaff.data.PDDLPrinter;
-import javaff.data.GroundCondition;
-import javaff.data.UngroundCondition;
-import javaff.data.UngroundEffect;
-
-import java.math.BigDecimal;
 import java.io.PrintStream;
-import java.util.Set;
+import java.math.BigDecimal;
 import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
+
+import javaff.data.GroundCondition;
+import javaff.data.PDDLPrinter;
+import javaff.data.UngroundCondition;
+import javaff.data.UngroundEffect;
+import javaff.planning.MetricState;
+import javaff.planning.State;
 
 public class BinaryComparator implements javaff.data.GroundCondition, javaff.data.UngroundCondition
 {
-	public Function first, second;
+	public Function first;
+	public Function second;
     public int type;
 
     public BinaryComparator(String s, Function f1, Function f2)

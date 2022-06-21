@@ -28,14 +28,14 @@
 
 package javaff.scheduling;
 
-import javaff.data.strips.InstantAction;
-
-import java.util.List;
+import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.Set;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.math.BigDecimal;
+import java.util.List;
+import java.util.Set;
+
+import javaff.data.strips.InstantAction;
 
 public class GraphSTN implements Cloneable, SimpleTemporalNetwork
 {    

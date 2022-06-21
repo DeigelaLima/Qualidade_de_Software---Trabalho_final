@@ -28,20 +28,20 @@
 
 package javaff.scheduling;
 
+import java.math.BigDecimal;
+import java.util.HashSet;
+import java.util.Hashtable;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Set;
+
 import javaff.data.Action;
-import javaff.data.strips.InstantAction;
 import javaff.data.metric.BinaryComparator;
-import javaff.data.metric.ResourceOperator;
 import javaff.data.metric.MetricSymbolStore;
+import javaff.data.metric.ResourceOperator;
+import javaff.data.strips.InstantAction;
 import javaff.data.temporal.DurationFunction;
 import javaff.data.temporal.DurativeAction;
-
-import java.util.Map;
-import java.util.Hashtable;
-import java.util.Set;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.math.BigDecimal;
 
 //OK for new precedence relations (i.e. meetCosntraints) should move consumers to AFTER the >= etc..) (actually maybe no)
 // AND for the new bounds should do incremental sweeps as in precedence relations
@@ -158,10 +158,9 @@ public class PrecedenceResourceGraph
 		{
 			ResourceOperator ro = (ResourceOperator) opit.next();
 			Action a2 = (Action) operators.get(ro);
-			if (ro.type == MetricSymbolStore.INCREASE || ro.type == MetricSymbolStore.SCALE_UP)
-			{
-				if (stn.U(a2,a)) rSet.add(a2);
-			}
+			boolean condition = (ro.type == MetricSymbolStore.INCREASE || ro.type == MetricSymbolStore.SCALE_UP) && stn.U(a2,a);
+			if (condition)
+				rSet.add(a2);
 		}
 		return rSet;
 	}
@@ -174,10 +173,9 @@ public class PrecedenceResourceGraph
 		{
 			ResourceOperator ro = (ResourceOperator) opit.next();
 			Action a2 = (Action) operators.get(ro);
-			if (ro.type == MetricSymbolStore.DECREASE || ro.type == MetricSymbolStore.SCALE_DOWN)
-			{
-				if (stn.U(a2,a)) rSet.add(a2);
-			}
+			boolean condition = (ro.type == MetricSymbolStore.DECREASE || ro.type == MetricSymbolStore.SCALE_DOWN) && stn.U(a2,a);
+			if (condition)
+				rSet.add(a2);
 		}
 		return rSet;
 	}
