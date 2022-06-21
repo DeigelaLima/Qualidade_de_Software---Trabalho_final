@@ -391,7 +391,7 @@ public class PlanningGraph
 			while (a2it.hasNext())
 			{
 				PGAction a2 = (PGAction) a2it.next();
-				if (a2.layer >= 0 && checkActionMutex(a, a2, pLayer))
+				if (a2.layer >= 0 && a.checkActionMutex(a2, pLayer))
 				{
 					a.makeMutex(a2, pLayer, newMutexes);
 				}
@@ -420,44 +420,8 @@ public class PlanningGraph
 
 	protected boolean checkActionMutex(MutexPair m, int l)
 	{
-		return checkActionMutex((PGAction)m.node1,(PGAction)m.node2, l);
+		return ((PGAction) m.node1).checkActionMutex((PGAction)m.node2, l);
 	}
-
-	protected boolean checkActionMutex(PGAction a1, PGAction a2, int l)
-	{
-		if (a1 == a2) return false;
-
-		Iterator p1it = a1.deletes.iterator();
-		while (p1it.hasNext())
-		{
-			PGProposition p1 = (PGProposition) p1it.next();;
-			if (a2.achieves.contains(p1)) return true;
-			if (a2.conditions.contains(p1)) return true;
-		}
-
-		Iterator p2it = a2.deletes.iterator();
-		while (p2it.hasNext())
-		{
-			PGProposition p2 = (PGProposition) p2it.next();
-			if (a1.achieves.contains(p2)) return true;
-			if (a1.conditions.contains(p2)) return true;
-		}
-
-		Iterator pc1it = a1.conditions.iterator();
-		while (pc1it.hasNext())
-		{
-			PGProposition p1 = (PGProposition) pc1it.next();
-			Iterator pc2it = a2.conditions.iterator();
-			while (pc2it.hasNext())
-			{
-				PGProposition p2 = (PGProposition) pc2it.next();
-				if (p1.mutexWith(p2, l)) return true;
-			}
-		}
-
-		return false;
-	}
-
 
 	protected boolean goalMet()
 	{
@@ -730,6 +694,39 @@ public class PlanningGraph
 		public String toString()
 		{
 			return action.toString();
+		}
+
+		public boolean checkActionMutex(PGAction a2, int l) {
+			if (this == a2)
+				return false;
+			Iterator p1it = this.deletes.iterator();
+			while (p1it.hasNext()) {
+				PGProposition p1 = (PGProposition) p1it.next();
+				;
+				if (a2.achieves.contains(p1))
+					return true;
+				if (a2.conditions.contains(p1))
+					return true;
+			}
+			Iterator p2it = a2.deletes.iterator();
+			while (p2it.hasNext()) {
+				PGProposition p2 = (PGProposition) p2it.next();
+				if (this.achieves.contains(p2))
+					return true;
+				if (this.conditions.contains(p2))
+					return true;
+			}
+			Iterator pc1it = this.conditions.iterator();
+			while (pc1it.hasNext()) {
+				PGProposition p1 = (PGProposition) pc1it.next();
+				Iterator pc2it = a2.conditions.iterator();
+				while (pc2it.hasNext()) {
+					PGProposition p2 = (PGProposition) pc2it.next();
+					if (p1.mutexWith(p2, l))
+						return true;
+				}
+			}
+			return false;
 		}
     }
 
