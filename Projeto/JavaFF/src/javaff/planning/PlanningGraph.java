@@ -287,7 +287,7 @@ public class PlanningGraph
 					while (pit.hasNext())
 					{
 						PGProposition p = (PGProposition) pit.next();
-						if (p.layer >= 0 && checkPropMutex(f, p, pLayer))
+						if (p.layer >= 0 && f.checkPropMutex(p, pLayer))
 						{
 							makeMutex(f, p, pLayer, newMutexes);
 						}
@@ -321,32 +321,7 @@ public class PlanningGraph
 
 	protected boolean checkPropMutex(MutexPair m, int l)
 	{
-		return checkPropMutex((PGProposition) m.node1, (PGProposition) m.node2, l);
-	}
-
-	protected boolean checkPropMutex(PGProposition p1, PGProposition p2, int l)
-	{
-		if (p1 == p2) return false;
-
-		//Componsate for statics
-		if (p1.achievedBy.isEmpty() || p2.achievedBy.isEmpty()) return false;
-
-		Iterator a1it = p1.achievedBy.iterator();
-		while(a1it.hasNext())
-		{
-			PGAction a1 = (PGAction) a1it.next();
-			if (a1.layer >= 0)
-			{
-				Iterator a2it = p2.achievedBy.iterator();
-				while (a2it.hasNext())
-				{
-					PGAction a2 = (PGAction) a2it.next();
-					if (a2.layer >= 0 && !a1.mutexWith(a2, l-1)) return false;
-				}
-			}
-
-		}
-		return true;
+		return ((PGProposition) m.node1).checkPropMutex((PGProposition) m.node2, l);
 	}
 
 	protected void makeMutex(Node n1, Node n2, int l, Set mutexPairs)
@@ -800,6 +775,26 @@ public class PlanningGraph
 		public String toString()
 		{
 			return proposition.toString();
+		}
+
+		public boolean checkPropMutex(PGProposition p2, int l) {
+			if (this == p2)
+				return false;
+			if (this.achievedBy.isEmpty() || p2.achievedBy.isEmpty())
+				return false;
+			Iterator a1it = this.achievedBy.iterator();
+			while (a1it.hasNext()) {
+				PGAction a1 = (PGAction) a1it.next();
+				if (a1.layer >= 0) {
+					Iterator a2it = p2.achievedBy.iterator();
+					while (a2it.hasNext()) {
+						PGAction a2 = (PGAction) a2it.next();
+						if (a2.layer >= 0 && !a1.mutexWith(a2, l - 1))
+							return false;
+					}
+				}
+			}
+			return true;
 		}
     }
 
