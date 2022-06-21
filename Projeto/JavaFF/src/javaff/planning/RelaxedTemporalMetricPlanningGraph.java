@@ -28,21 +28,20 @@
 
 package javaff.planning;
 
-import javaff.data.temporal.DurativeAction;
-import javaff.data.GroundProblem;
+import java.math.BigDecimal;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Set;
+
 import javaff.data.Action;
+import javaff.data.GroundProblem;
 import javaff.data.Plan;
 import javaff.data.TotalOrderPlan;
-import javaff.data.strips.Proposition;
-import javaff.data.temporal.StartInstantAction;
-import javaff.data.temporal.DurationFunction;
 import javaff.data.metric.Function;
-
-import java.util.Set;
-import java.util.List;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.math.BigDecimal;
+import javaff.data.strips.Proposition;
+import javaff.data.temporal.DurationFunction;
+import javaff.data.temporal.DurativeAction;
+import javaff.data.temporal.StartInstantAction;
 
 public class RelaxedTemporalMetricPlanningGraph extends RelaxedMetricPlanningGraph
 {

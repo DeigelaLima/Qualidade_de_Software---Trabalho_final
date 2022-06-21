@@ -84,7 +84,7 @@ public class VelosoSchedulabilityChecker implements SchedulabilityChecker, Clone
 		while (allGood && eit.hasNext())
 		{
 			EnvelopeEntry e = (EnvelopeEntry) eit.next();
-			add(e,a,s);
+			e.add(a,s, this);
 			// if so, check for consistency
 			allGood = e.check();
 		}
@@ -134,43 +134,7 @@ public class VelosoSchedulabilityChecker implements SchedulabilityChecker, Clone
 		
 	}
 
-	private void add(EnvelopeEntry e, InstantAction a, TemporalMetricState s)
-	{
-		if (checkOrder(e.start,a)) e.addFollower(a, s);
-		if (checkOrder(a,e.end)) e.addPreceder(a, s);
-
-		Set fs = new HashSet();
-		Iterator fit = e.followsStart.iterator();
-		while (fit.hasNext())
-		{
-			InstantAction f = (InstantAction) fit.next();
-			if (checkOrder(f,a)) fs.add(f);
-		}
-		fit = fs.iterator();
-		while (fit.hasNext())
-		{
-			InstantAction f = (InstantAction) fit.next();
-			e.addFollowerOrder(f,a, s);
-		}
-
-		/*
-		Set ps = new HashSet();
-		Iterator pit = e.precedesEnd.iterator();
-		while (pit.hasNext())
-		{
-			InstantAction p = (InstantAction) pit.next();
-			if (checkOrder(a,p)) ps.add(p);
-		}
-		pit = ps.iterator();
-		while (pit.hasNext())
-		{
-			InstantAction p = (InstantAction) pit.next();
-			e.addPrecederOrder(a,p,s);
-		}*/
-		
-	}
-
-	private boolean checkOrder(InstantAction a, InstantAction b)
+	public boolean checkOrder(InstantAction a, InstantAction b)
 	{
 		if (a.equals(b)) return false;
 		else if (a instanceof SplitInstantAction && b instanceof SplitInstantAction)
@@ -279,6 +243,26 @@ public class VelosoSchedulabilityChecker implements SchedulabilityChecker, Clone
 			e.maxEnv = maxEnv;
 			e.minEnv = minEnv;
 			return e;
+		}
+
+		public void add(InstantAction a, TemporalMetricState s,
+				VelosoSchedulabilityChecker velosoSchedulabilityChecker) {
+			if (velosoSchedulabilityChecker.checkOrder(this.start, a))
+				addFollower(a, s);
+			if (velosoSchedulabilityChecker.checkOrder(a, this.end))
+				addPreceder(a, s);
+			Set fs = new HashSet();
+			Iterator fit = this.followsStart.iterator();
+			while (fit.hasNext()) {
+				InstantAction f = (InstantAction) fit.next();
+				if (velosoSchedulabilityChecker.checkOrder(f, a))
+					fs.add(f);
+			}
+			fit = fs.iterator();
+			while (fit.hasNext()) {
+				InstantAction f = (InstantAction) fit.next();
+				addFollowerOrder(f, a, s);
+			}
 		}
 	}
 }

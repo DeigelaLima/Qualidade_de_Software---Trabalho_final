@@ -45,13 +45,9 @@ import java.util.Hashtable;
 
 public class PlanningGraph
 {
-	//******************************************************
-	// Data Structures
-	//******************************************************
-	Map propositionMap = new Hashtable();      // (Proposition => PGProposition)
+	private PlanningGraphProduct planningGraphProduct = new PlanningGraphProduct();
 	Map actionMap = new Hashtable();           // (Action => PGAction)
 
-	Set propositions = new HashSet();
 	Set actions = new HashSet();
 
 	Set initial, goal;
@@ -147,16 +143,7 @@ public class PlanningGraph
 
     protected PGProposition getProposition(Proposition p)
     {
-		Object o = propositionMap.get(p);
-		PGProposition pgp;
-		if (o == null)
-		{
-			pgp = new PGProposition(p);
-			propositionMap.put(p, pgp);
-			propositions.add(pgp);
-		}
-		else pgp = (PGProposition) o;
-		return pgp;
+		return planningGraphProduct.getProposition(p, this);
     }
 
 	protected void setLinks()
@@ -170,7 +157,7 @@ public class PlanningGraph
 			while (csit.hasNext())
 			{
 				Proposition p = (Proposition) csit.next();
-				PGProposition pgp = getProposition(p);
+				PGProposition pgp = planningGraphProduct.getProposition(p, this);
 				pga.conditions.add(pgp);
 				pgp.achieves.add(pga);
 			}
@@ -179,7 +166,7 @@ public class PlanningGraph
 			while (alit.hasNext())
 			{
 				Proposition p = (Proposition) alit.next();
-				PGProposition pgp = getProposition(p);
+				PGProposition pgp = planningGraphProduct.getProposition(p, this);
 				pga.achieves.add(pgp);
 				pgp.achievedBy.add(pga);
 			}
@@ -188,7 +175,7 @@ public class PlanningGraph
 			while (dlit.hasNext())
 			{
 				Proposition p = (Proposition) dlit.next();
-				PGProposition pgp = getProposition(p);
+				PGProposition pgp = planningGraphProduct.getProposition(p, this);
 				pga.deletes.add(pgp);
 				pgp.deletedBy.add(pga);
 			}
@@ -213,7 +200,7 @@ public class PlanningGraph
 			a.reset();
 		}
 
-		Iterator pit = propositions.iterator();
+		Iterator pit = planningGraphProduct.getPropositions().iterator();
 		while (pit.hasNext())
 		{
 			PGProposition p = (PGProposition) pit.next();
@@ -228,7 +215,7 @@ public class PlanningGraph
 		while (csit.hasNext())
 		{
 			Proposition p = (Proposition) csit.next();
-			PGProposition pgp = getProposition(p);
+			PGProposition pgp = planningGraphProduct.getProposition(p, this);
 			goal.add(pgp);
 		}
 	}
@@ -241,14 +228,14 @@ public class PlanningGraph
 		while (csit.hasNext())
 		{
 			Proposition p = (Proposition) csit.next();
-			PGProposition pgp = getProposition(p);
+			PGProposition pgp = planningGraphProduct.getProposition(p, this);
 			initial.add(pgp);
 		}
 	}
 
 	protected void createNoOps()
 	{
-		Iterator pit = propositions.iterator();
+		Iterator pit = planningGraphProduct.getPropositions().iterator();
 		while (pit.hasNext())
 		{
 			PGProposition p = (PGProposition) pit.next();
@@ -283,7 +270,7 @@ public class PlanningGraph
 				//calculate mutexes
 				if (pLayer != 0)
 				{
-					Iterator pit = propositions.iterator();
+					Iterator pit = planningGraphProduct.getPropositions().iterator();
 					while (pit.hasNext())
 					{
 						PGProposition p = (PGProposition) pit.next();
@@ -821,7 +808,7 @@ public class PlanningGraph
 	public void printLayer(int i)
 	{
 		System.out.println("Facts:");
-		Iterator pit = propositions.iterator();
+		Iterator pit = planningGraphProduct.getPropositions().iterator();
 		while (pit.hasNext())
 		{
 			PGProposition p = (PGProposition) pit.next();
