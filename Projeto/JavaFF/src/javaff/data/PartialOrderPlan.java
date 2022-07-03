@@ -57,12 +57,12 @@ public class PartialOrderPlan implements Plan
 	{
 		Set ord = null;
 		Object o = strictOrderings.get(first);
-		if (o == null)
-		{
+		if (o != null)
+			ord = (HashSet) o;
+		else {
 			ord = new HashSet();
 			strictOrderings.put(first, ord);
 		}
-		else ord = (HashSet) o;
 		ord.add(second);
 		actions.add(first);
 		actions.add(second);
@@ -72,12 +72,12 @@ public class PartialOrderPlan implements Plan
 	{
 		Set ord = null;
 		Object o = equalOrderings.get(first);
-		if (o == null)
-		{
+		if (o != null)
+			ord = (HashSet) o;
+		else {
 			ord = new HashSet();
 			equalOrderings.put(first, ord);
 		}
-		else ord = (HashSet) o;
 		ord.add(second);
 		actions.add(first);
 		actions.add(second);
@@ -85,25 +85,16 @@ public class PartialOrderPlan implements Plan
 
 	public void addOrder(Action first, Action second, Proposition p)
 	{
-		if (first instanceof SplitInstantAction)
-		{
-			SplitInstantAction sa = (SplitInstantAction) first;
-			if (!sa.exclusivelyInvariant(p))
-			{
-				addEqualOrdering(first, second);
-				return;
-			}
-			
+		boolean condition = first instanceof SplitInstantAction && !((SplitInstantAction) first).exclusivelyInvariant(p);
+		if (condition) {
+			addEqualOrdering(first, second);
+			return;
 		}
 
-		if (second instanceof SplitInstantAction)
-		{
-			SplitInstantAction sa = (SplitInstantAction) second;
-			if (!sa.exclusivelyInvariant(p))
-			{
-				addEqualOrdering(first, second);
-				return;
-			}
+		boolean condition1 = second instanceof SplitInstantAction && !((SplitInstantAction) second).exclusivelyInvariant(p);
+		if (condition1) {
+			addEqualOrdering(first, second);
+			return;
 		}
 		
 		addStrictOrdering(first, second);
@@ -120,8 +111,8 @@ public class PartialOrderPlan implements Plan
 
 	public void addActions(Set s)
 	{
-		Iterator sit = s.iterator();
-		while (sit.hasNext()) addAction((Action) sit.next());
+		for (Iterator sit = s.iterator(); sit.hasNext();)
+			addAction((Action) sit.next());
 	}
 
 	public Set getActions()
@@ -132,52 +123,46 @@ public class PartialOrderPlan implements Plan
 	public Set getTemporalConstraints()
 	{
 		Set rSet = new HashSet();
-		Iterator ait = actions.iterator();
-		while (ait.hasNext())
-		{
+		for (Iterator ait = actions.iterator(); ait.hasNext();) {
 			Action a = (Action) ait.next();
-			
 			Set ss = (HashSet) strictOrderings.get(a);
 			Iterator sit = ss.iterator();
-			while (sit.hasNext())
-			{
+			while (sit.hasNext()) {
 				Action b = (Action) sit.next();
-				rSet.add(TemporalConstraint.getConstraint((InstantAction)a,(InstantAction)b));
+				rSet.add(TemporalConstraint.getConstraint((InstantAction) a, (InstantAction) b));
 			}
-
 			Set es = (HashSet) equalOrderings.get(a);
 			Iterator eit = es.iterator();
-			while (eit.hasNext())
-			{
+			while (eit.hasNext()) {
 				Action b = (Action) eit.next();
-				rSet.add(TemporalConstraint.getConstraintEqual((InstantAction)a,(InstantAction)b));
+				rSet.add(TemporalConstraint.getConstraintEqual((InstantAction) a, (InstantAction) b));
 			}
 		}
 		return rSet;
 			
 	}
 
-	public void print(PrintStream p)
+	public void print(PrintStream s)
 	{
 		Iterator sit = actions.iterator();
 		while (sit.hasNext())
 		{
 			Action a = (Action) sit.next();
-			p.println(a);
-			p.println("\tStrict Orderings: "+strictOrderings.get(a));
-			p.println("\tLess than or equal Orderings: "+equalOrderings.get(a));
+			s.println(a);
+			s.println("\tStrict Orderings: "+strictOrderings.get(a));
+			s.println("\tLess than or equal Orderings: "+equalOrderings.get(a));
 		}
 	}
 
-	public void print(PrintWriter p)
+	public void print(PrintWriter w)
 	{
 		Iterator sit = actions.iterator();
 		while (sit.hasNext())
 		{
 			Action a = (Action) sit.next();
-			p.println(a);
-			p.println("\tStrict Orderings: "+strictOrderings.get(a));
-			p.println("\tLess than or equal Orderings: "+equalOrderings.get(a));
+			w.println(a);
+			w.println("\tStrict Orderings: "+strictOrderings.get(a));
+			w.println("\tLess than or equal Orderings: "+equalOrderings.get(a));
 		}
 	}
 }

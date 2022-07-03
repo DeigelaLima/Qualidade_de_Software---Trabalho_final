@@ -33,26 +33,29 @@ import java.util.Comparator;
 
 import javaff.planning.State;
 
-public class LimitedEnforcedHillClimbingSearch extends EnforcedHillClimbingSearch
-{
-        private BigDecimal planSizeLimit;
-        private BigDecimal currentHValue;
+public class LimitedEnforcedHillClimbingSearch extends EnforcedHillClimbingSearch {
+	private BigDecimal planSizeLimit;
+	private BigDecimal currentHValue;
 
-	public LimitedEnforcedHillClimbingSearch(State s, BigDecimal l)
-	{
+	public LimitedEnforcedHillClimbingSearch(State s, BigDecimal l) {
 		this(s, new HValueComparator(), l);
 	}
 
-	public LimitedEnforcedHillClimbingSearch(State s, Comparator c, BigDecimal l)
-	{
+	public LimitedEnforcedHillClimbingSearch(State s, Comparator c, BigDecimal l) {
 		super(s);
 		setComparator(c);
-                planSizeLimit = l;
+		planSizeLimit = l;
 	}
 
 	public boolean needToVisit(State s) {
-		if (s.getGValue().compareTo(planSizeLimit) > 0) return false; // if length bound has been exceeded...
+		return s.getGValue().compareTo(planSizeLimit) > 0 ? false : super.needToVisit(s);
+	}
 
-		return super.needToVisit(s);
+	public BigDecimal getCurrentHValue() {
+		return currentHValue;
+	}
+
+	public void setCurrentHValue(BigDecimal currentHValue) {
+		this.currentHValue = currentHValue;
 	}
 }

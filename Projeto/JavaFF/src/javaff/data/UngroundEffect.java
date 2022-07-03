@@ -34,7 +34,7 @@ import javaff.data.strips.PredicateSymbol;
 
 public interface UngroundEffect extends Effect
 {
-	public boolean effects(PredicateSymbol ps);
-	public UngroundCondition effectsAdd(UngroundCondition cond);
+	public boolean effects(PredicateSymbol s);
+	public UngroundCondition effectsAdd(UngroundCondition c);
 	public GroundEffect groundEffect(Map varMap);
 }

@@ -38,45 +38,44 @@ import java.util.Set;
 import javaff.data.strips.OperatorName;
 import javaff.planning.State;
 
-public abstract class Action
-{
-    public OperatorName name;
-    public List params = new ArrayList(); // List of PDDLObjects
-
+public abstract class Action {
+	public OperatorName name;
+	public List params = new ArrayList(); // List of PDDLObjects
 	public BigDecimal cost = new BigDecimal(0);
 
-    public String toString()
-    {
+	public String toString() {
 		String stringrep = name.toString();
-		Iterator i = params.iterator();
-		while (i.hasNext())
-		{
-			stringrep = stringrep + " " +  i.next();
+		for (Iterator i = params.iterator(); i.hasNext();) {
+			stringrep = stringrep + " " + i.next();
 		}
 		return stringrep;
-    }
+	}
 
 	public abstract boolean isApplicable(State s);
+
 	public abstract void apply(State s);
+
 	public abstract Set getConditionalPropositions();
+
 	public abstract Set getAddPropositions();
+
 	public abstract Set getDeletePropositions();
+
 	public abstract Set getComparators();
+
 	public abstract Set getOperators();
+
 	public abstract void staticify(Map fValues);
 
-	public boolean equals(Object obj)
-    {
-		if (obj instanceof Action)
-		{
-			Action a = (Action) obj;
-			return (name.equals(a.name) && params.equals(a.params));
-		}
-		else return false;
-    }
+	public boolean equals(Object o) {
+		if (o instanceof Action) {
+			Action a = (Action) o;
+			return name.equals(a.name) && params.equals(a.params);
+		} else
+			return false;
+	}
 
-    public int hashCode()
-    {
-        return name.hashCode() ^ params.hashCode();
-    }
+	public int hashCode() {
+		return name.hashCode() ^ params.hashCode();
+	}
 }

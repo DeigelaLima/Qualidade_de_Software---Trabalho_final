@@ -17,11 +17,11 @@ public class PlanningGraphProduct {
 		return propositions;
 	}
 
-	public PGProposition getProposition(Proposition p, PlanningGraph planningGraph) {
+	public PGProposition getProposition(Proposition p, PlanningGraph g) {
 		Object o = propositionMap.get(p);
 		PGProposition pgp;
 		if (o == null) {
-			pgp = planningGraph.new PGProposition(p);
+			pgp = g.new PGProposition(p);
 			propositionMap.put(p, pgp);
 			propositions.add(pgp);
 		} else

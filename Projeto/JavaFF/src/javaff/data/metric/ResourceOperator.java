@@ -74,39 +74,39 @@ public class ResourceOperator implements javaff.data.GroundEffect, javaff.data.U
 		BigDecimal dc = change.getValue(ms);
 		BigDecimal res = null;
 
-		if (type == MetricSymbolStore.ASSIGN) res = dc;
-		else if (type == MetricSymbolStore.INCREASE) res = dr.add(dc);
-		else if (type == MetricSymbolStore.DECREASE) res = dr.subtract(dc);
-		else if (type == MetricSymbolStore.SCALE_UP) res = dr.multiply(dc);
-		else if (type == MetricSymbolStore.SCALE_DOWN) res = dr.divide(dc, MetricSymbolStore.SCALE, MetricSymbolStore.ROUND);
+		if (type == MetricSymbolStore.assign) res = dc;
+		else if (type == MetricSymbolStore.increase) res = dr.add(dc);
+		else if (type == MetricSymbolStore.decrease) res = dr.subtract(dc);
+		else if (type == MetricSymbolStore.scaleUP) res = dr.multiply(dc);
+		else if (type == MetricSymbolStore.scaleDown) res = dr.divide(dc, MetricSymbolStore.scale, MetricSymbolStore.round);
 		ms.setValue(resource,res);
     }
 
-	public BigDecimal applyMax(BigDecimal d, MatrixSTN stn)
+	public BigDecimal applyMax(BigDecimal d, MatrixSTN n)
 	{
 		BigDecimal dr = d;
-		BigDecimal dc = change.getMaxValue(stn);
+		BigDecimal dc = change.getMaxValue(n);
 		BigDecimal res = null;
 
-		if (type == MetricSymbolStore.ASSIGN) res = dc;
-		else if (type == MetricSymbolStore.INCREASE) res = dr.add(dc);
-		else if (type == MetricSymbolStore.DECREASE) res = dr.subtract(dc);
-		else if (type == MetricSymbolStore.SCALE_UP) res = dr.multiply(dc);
-		else if (type == MetricSymbolStore.SCALE_DOWN) res = dr.divide(dc, MetricSymbolStore.SCALE, MetricSymbolStore.ROUND);
+		if (type == MetricSymbolStore.assign) res = dc;
+		else if (type == MetricSymbolStore.increase) res = dr.add(dc);
+		else if (type == MetricSymbolStore.decrease) res = dr.subtract(dc);
+		else if (type == MetricSymbolStore.scaleUP) res = dr.multiply(dc);
+		else if (type == MetricSymbolStore.scaleDown) res = dr.divide(dc, MetricSymbolStore.scale, MetricSymbolStore.round);
 		return res;
 	}
 
-	public BigDecimal applyMin(BigDecimal d, MatrixSTN stn)
+	public BigDecimal applyMin(BigDecimal d, MatrixSTN n)
 	{
 		BigDecimal dr = d;
-		BigDecimal dc = change.getMinValue(stn);
+		BigDecimal dc = change.getMinValue(n);
 		BigDecimal res = null;
 
-		if (type == MetricSymbolStore.ASSIGN) res = dc;
-		else if (type == MetricSymbolStore.INCREASE) res = dr.add(dc);
-		else if (type == MetricSymbolStore.DECREASE) res = dr.subtract(dc);
-		else if (type == MetricSymbolStore.SCALE_UP) res = dr.multiply(dc);
-		else if (type == MetricSymbolStore.SCALE_DOWN) res = dr.divide(dc, MetricSymbolStore.SCALE, MetricSymbolStore.ROUND);
+		if (type == MetricSymbolStore.assign) res = dc;
+		else if (type == MetricSymbolStore.increase) res = dr.add(dc);
+		else if (type == MetricSymbolStore.decrease) res = dr.subtract(dc);
+		else if (type == MetricSymbolStore.scaleUP) res = dr.multiply(dc);
+		else if (type == MetricSymbolStore.scaleDown) res = dr.divide(dc, MetricSymbolStore.scale, MetricSymbolStore.round);
 		return res;
 	}
 
@@ -131,21 +131,21 @@ public class ResourceOperator implements javaff.data.GroundEffect, javaff.data.U
 		return new ResourceOperator(type, (NamedFunction) resource.ground(varMap), change.ground(varMap));
 	}
 
-	public boolean effects(PredicateSymbol p)
+	public boolean effects(PredicateSymbol s)
 	{
-		if (p instanceof FunctionSymbol)
+		if (s instanceof FunctionSymbol)
 		{
-			FunctionSymbol f = (FunctionSymbol) p;
+			FunctionSymbol f = (FunctionSymbol) s;
 			return (resource.getPredicateSymbol().equals(f));
 		}
 		else return false;
 	}
 
-	public UngroundCondition effectsAdd(UngroundCondition cond)
+	public UngroundCondition effectsAdd(UngroundCondition c)
 	{
-		if (cond instanceof BinaryComparator)
+		if (c instanceof BinaryComparator)
 		{
-			BinaryComparator bc = (BinaryComparator) cond;
+			BinaryComparator bc = (BinaryComparator) c;
 			if (bc.effectedBy(this))
 			{
 				Function l = bc.first;
@@ -160,10 +160,10 @@ public class ResourceOperator implements javaff.data.GroundEffect, javaff.data.U
 				}
 				return new BinaryComparator(bc.type, l, r);
 			}
-			else return cond;
+			else return c;
 			
 		}
-		else return cond;
+		else return c;
 	}
 
 	public Set getAddPropositions()
@@ -184,11 +184,11 @@ public class ResourceOperator implements javaff.data.GroundEffect, javaff.data.U
     return s;
   }
 
-	public boolean equals(Object obj)
+	public boolean equals(Object o)
 	{
-		if (obj instanceof ResourceOperator)
+		if (o instanceof ResourceOperator)
 		{
-			ResourceOperator ro = (ResourceOperator) obj;
+			ResourceOperator ro = (ResourceOperator) o;
 			if (ro.type == this.type && resource.equals(ro.resource) && change.equals(ro.change)) return true;
 			else return false;
 		}
@@ -205,9 +205,9 @@ public class ResourceOperator implements javaff.data.GroundEffect, javaff.data.U
 		return MetricSymbolStore.getSymbol(type)+" "+resource.toStringTyped() + " " + change.toStringTyped();
     }
 
-	public void PDDLPrint(PrintStream p, int indent)
+	public void pddlPrint(PrintStream s, int indent)
 	{
-		PDDLPrinter.printToString(this, p, false, false, indent);
+		PDDLPrinter.printToString(this, s, false, false, indent);
 	}
 }
 

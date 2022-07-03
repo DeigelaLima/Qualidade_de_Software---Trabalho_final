@@ -42,18 +42,18 @@ public class EndInstantAction extends SplitInstantAction
 		return parent.startAction;
 	}
 
-	public void applySplit(TemporalMetricState ts)
+	public void applySplit(TemporalMetricState s)
     {
 		Set is = parent.invariant.getConditionalPropositions();
 		
 		Iterator iit = is.iterator();
 		while (iit.hasNext())
 		{
-			ts.invariants.remove(iit.next());
+			s.invariants.remove(iit.next());
 		}
-		ts.openActions.remove(parent);
-		ts.actions.remove(this);
-		ts.actions.add(getSibling());
+		s.openActions.remove(parent);
+		s.actions.remove(this);
+		s.actions.add(getSibling());
 	}
 
 	public boolean exclusivelyInvariant(Proposition p)

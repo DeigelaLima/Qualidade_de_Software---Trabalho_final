@@ -45,9 +45,7 @@ public class Variable extends javaff.data.Parameter
 
 	public int hashCode()
     {
-		int hash = 9;
-		hash = 31 * hash ^ name.hashCode();
-		hash = 31 * hash ^ type.hashCode();
-		return hash;
+		int hash = 31 * 9 ^ name.hashCode();
+		return hash = 31 * hash ^ type.hashCode();
 	}
 }

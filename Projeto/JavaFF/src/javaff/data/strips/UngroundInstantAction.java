@@ -42,9 +42,9 @@ public class UngroundInstantAction extends Operator
     public UngroundCondition condition;
     public UngroundEffect effect;
 
-	public boolean effects(PredicateSymbol ps)
+	public boolean effects(PredicateSymbol s)
 	{
-		return effect.effects(ps);
+		return effect.effects(s);
 	}
 
 	public Action ground(Map varMap)
@@ -56,9 +56,7 @@ public class UngroundInstantAction extends Operator
 	{
 		a.name = this.name;
 
-		Iterator pit = params.iterator();
-		while (pit.hasNext())
-		{
+		for (Iterator pit = params.iterator(); pit.hasNext();) {
 			Variable v = (Variable) pit.next();
 			PDDLObject o = (PDDLObject) varMap.get(v);
 			a.params.add(o);
@@ -73,25 +71,25 @@ public class UngroundInstantAction extends Operator
 		return condition.getStaticPredicates();
 	}
 
-	public void PDDLPrint(java.io.PrintStream p, int indent)
+	public void pddlPrint(java.io.PrintStream s, int indent)
 	{
-		p.println();
-		PDDLPrinter.printIndent(p, indent);
-		p.print("(:action ");
-		p.print(name);
-		p.println();
-		PDDLPrinter.printIndent(p, indent+1);
-		p.print(":parameters(\n");
-		PDDLPrinter.printToString(params, p, true, false, indent+2);
-		p.println(")");
-		PDDLPrinter.printIndent(p, indent+1);
-		p.print(":precondition");
-		condition.PDDLPrint(p, indent+2);
-		p.println();
-		PDDLPrinter.printIndent(p, indent+1);
-		p.print(":effect");
-		effect.PDDLPrint(p, indent+2);
-		p.print(")");
+		s.println();
+		PDDLPrinter.printIndent(s, indent);
+		s.print("(:action ");
+		s.print(name);
+		s.println();
+		PDDLPrinter.printIndent(s, indent+1);
+		s.print(":parameters(\n");
+		PDDLPrinter.printToString(params, s, true, false, indent+2);
+		s.println(")");
+		PDDLPrinter.printIndent(s, indent+1);
+		s.print(":precondition");
+		condition.pddlPrint(s, indent+2);
+		s.println();
+		PDDLPrinter.printIndent(s, indent+1);
+		s.print(":effect");
+		effect.pddlPrint(s, indent+2);
+		s.print(")");
 	}
 
 }

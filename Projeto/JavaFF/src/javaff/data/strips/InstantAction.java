@@ -43,7 +43,7 @@ public abstract class InstantAction extends Action
 
 	public boolean isApplicable(State s)
 	{
-		return condition.isTrue(s) && s.checkAvailability(this);
+		return condition.stateIsTrue(s) && s.checkAvailability(this);
 	}
 
 	public void apply(State s)

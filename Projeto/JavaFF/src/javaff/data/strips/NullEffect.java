@@ -39,83 +39,67 @@ import javaff.data.UngroundCondition;
 import javaff.data.UngroundEffect;
 import javaff.planning.State;
 
-public class NullEffect implements UngroundEffect, GroundEffect
-{
+public class NullEffect implements UngroundEffect, GroundEffect {
 	private static NullEffect n;
 
-	private NullEffect()
-    {
-    }
+	public NullEffect() {
+	}
 
-	public static NullEffect getInstance()
-	{
-		if (n == null) n = new NullEffect();
+	public static NullEffect getInstance() {
+		if (n == null)
+			n = new NullEffect();
 		return n;
 	}
 
-	public boolean effects(PredicateSymbol ps)
-	{
+	public boolean effects(PredicateSymbol s) {
 		return false;
 	}
 
-	public UngroundCondition effectsAdd(UngroundCondition cond)
-	{
-		return cond;
+	public UngroundCondition effectsAdd(UngroundCondition c) {
+		return c;
 	}
 
-	public GroundEffect groundEffect(Map varMap)
-	{
+	public GroundEffect groundEffect(Map varMap) {
 		return this;
 	}
-	
-	public void apply(State s)
-    {
 
-    }
+	public void apply(State s) {
 
-	public void applyAdds(State s)
-    {
-		
 	}
 
-	public void applyDels(State s)
-    {
-		
+	public void applyAdds(State s) {
+
 	}
 
-	public GroundEffect staticifyEffect(Map fValues)
-	{
+	public void applyDels(State s) {
+
+	}
+
+	public GroundEffect staticifyEffect(Map fValues) {
 		return this;
 	}
-	
 
-	public Set getAddPropositions()
-	{
+	public Set getAddPropositions() {
 		return new HashSet();
 	}
-	
-	public Set getDeletePropositions()
-	{
-		return new HashSet();		
+
+	public Set getDeletePropositions() {
+		return new HashSet();
 	}
 
-  public Set getOperators()
-  {
-  	return new HashSet();
-  }
+	public Set getOperators() {
+		return new HashSet();
+	}
 
-	public String toString()
-	{
+	public String toString() {
 		return "()";
 	}
 
-	public String toStringTyped()
-	{
+	public String toStringTyped() {
 		return toString();
 	}
-	
-	public void PDDLPrint(PrintStream p, int indent)
-    {
-		PDDLPrinter.printToString(this, p, false, false, indent);
+
+	public void pddlPrint(PrintStream s, int indent) {
+		PDDLPrinter.printToString(this, s, false, false, indent);
 	}
 }

@@ -39,7 +39,7 @@ public class RelaxedPlanningGraph extends PlanningGraph
 		super(gp);
 	}
 	
-	protected boolean checkPropMutex(MutexPair m, int l)
+	protected boolean checkPropMutex(MutexPair p, int l)
     {
 		return false;
 	}
@@ -49,7 +49,7 @@ public class RelaxedPlanningGraph extends PlanningGraph
 		return false;
 	}
 
-	protected boolean checkActionMutex(MutexPair m, int l)
+	protected boolean checkActionMutex(MutexPair p, int l)
     {
 		return false;
 	}

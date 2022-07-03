@@ -33,5 +33,5 @@ import javaff.data.TotalOrderPlan;
 
 public interface Scheduler
 {
-	public TimeStampedPlan schedule(TotalOrderPlan top);
+	public TimeStampedPlan schedule(TotalOrderPlan p);
 }

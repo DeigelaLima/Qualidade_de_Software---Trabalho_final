@@ -40,16 +40,16 @@ public class TemporalConstraint extends Constraint
 	InstantAction y;
 	BigDecimal b;
 
-	public TemporalConstraint(InstantAction X, InstantAction Y, BigDecimal B)
+	public TemporalConstraint(InstantAction x, InstantAction y, BigDecimal b)
 	{
-		x = X;
-		y = Y;
-		b = B;
+		this.x = x;
+		this.y = y;
+		this.b = b;
 	}
 
 	public static TemporalConstraint getConstraint(InstantAction first, InstantAction second)
 	{
-		return new TemporalConstraint(first, second, javaff.JavaFF.EPSILON.negate());
+		return new TemporalConstraint(first, second, javaff.JavaFF.epsilon.negate());
 	}
 
 	public static TemporalConstraint getConstraintEqual(InstantAction first, InstantAction second)
@@ -88,11 +88,11 @@ public class TemporalConstraint extends Constraint
 		return (x.toString() + " - " + y.toString() +" <= "+b.toString());
 	}
 
-	public boolean equals(Object obj)
+	public boolean equals(Object o)
 	{
-		if (obj instanceof TemporalConstraint)
+		if (o instanceof TemporalConstraint)
 		{
-			TemporalConstraint c = (TemporalConstraint) obj;
+			TemporalConstraint c = (TemporalConstraint) o;
 			return (c.x.equals(x) && c.y.equals(y) && c.b.equals(b));
 		}
 		return false;
@@ -100,10 +100,8 @@ public class TemporalConstraint extends Constraint
 
 	public int hashCode()
 	{
-		int hash = 2;
-		hash = 31 * hash ^ x.hashCode();
-		hash = 31 * hash ^ y.hashCode();
-		hash = 31 * hash ^ b.hashCode();
+		int hash = 31 * 2 ^ x.hashCode();
+		hash = 31 * (31 * hash ^ y.hashCode()) ^ b.hashCode();
 		return hash;
 	}
 }

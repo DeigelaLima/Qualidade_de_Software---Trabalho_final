@@ -28,7 +28,6 @@
 
 package javaff.data;
 
-public interface Effect extends PDDLPrintable
-{
+public interface Effect extends PDDLPrintable {
 
 }

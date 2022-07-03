@@ -46,13 +46,10 @@ public class EitherType extends Type
 	public String toString()
 	{
 		String str = "(either";
-		Iterator tit = types.iterator();
-		while (tit.hasNext())
-		{
-			str+=" " +tit.next();
+		for (Iterator tit = types.iterator(); tit.hasNext();) {
+			str += " " + tit.next();
 		}
-		str += ")";
-		return str;
+		return str += ")";
 	}
 
 	public String toStringTyped()
@@ -60,11 +57,11 @@ public class EitherType extends Type
 		return toString();
 	}
 
-	public boolean equals(Object obj)
+	public boolean equals(Object o)
 	{
-		if (obj instanceof EitherType)
+		if (o instanceof EitherType)
 		{
-			EitherType et = (EitherType) obj;
+			EitherType et = (EitherType) o;
 			return (types.equals(et.types));
 		}
 		else return false;
@@ -72,11 +69,10 @@ public class EitherType extends Type
 
 	public boolean isOfType(Type t) // is this of type t (i.e. is type further up the hierarchy)
 	{
-		Iterator tit = types.iterator();
-		while (tit.hasNext())
-		{
+		for (Iterator tit = types.iterator(); tit.hasNext();) {
 			SimpleType st = (SimpleType) tit.next();
-			if (st.isOfType(t)) return true;
+			if (st.isOfType(t))
+				return true;
 		}
 		return false;
 	}

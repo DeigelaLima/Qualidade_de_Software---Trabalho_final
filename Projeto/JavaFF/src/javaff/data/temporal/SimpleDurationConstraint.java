@@ -55,72 +55,68 @@ public class SimpleDurationConstraint extends DurationConstraint
 		return new SimpleDurationConstraint((DurationFunction) variable.ground(varMap), value.ground(varMap), type);
 	}
 
-	public BigDecimal getDuration(MetricState ms)
+	public BigDecimal getDuration(MetricState s)
 	{
-		return value.getValue(ms);
+		return value.getValue(s);
 	}
 
 	//could put stuff about < and > using epsilon
-	public BigDecimal getMaxDuration(MetricState ms)
+	public BigDecimal getMaxDuration(MetricState s)
 	{
-		if (type == MetricSymbolStore.LESS_THAN_EQUAL) return value.getValue(ms);
-		else if (type == MetricSymbolStore.GREATER_THAN_EQUAL) return javaff.JavaFF.MAX_DURATION;
-		else if (type == MetricSymbolStore.EQUAL) return value.getValue(ms);
+		if (type == MetricSymbolStore.lessThanEqual) return value.getValue(s);
+		else if (type == MetricSymbolStore.greaterThanEqual) return javaff.JavaFF.maxDuration;
+		else if (type == MetricSymbolStore.equal) return value.getValue(s);
 
 		else return null;
 	}
 
-	public BigDecimal getMinDuration(MetricState ms)
+	public BigDecimal getMinDuration(MetricState s)
 	{
-		if (type == MetricSymbolStore.LESS_THAN_EQUAL) return new BigDecimal(0);
-		else if (type == MetricSymbolStore.GREATER_THAN_EQUAL) return value.getValue(ms);
-		else if (type == MetricSymbolStore.EQUAL) return value.getValue(ms);
+		if (type == MetricSymbolStore.lessThanEqual) return new BigDecimal(0);
+		else if (type == MetricSymbolStore.greaterThanEqual) return value.getValue(s);
+		else if (type == MetricSymbolStore.equal) return value.getValue(s);
 		else return null;
 	}
 
 	public boolean staticDuration()
 	{
 		//return value.isStatic();
-		return (type == MetricSymbolStore.EQUAL);
+		return (type == MetricSymbolStore.equal);
 	}
 
 	
-	public void addConstraint(SimpleDurationConstraint sdc)
+	public void addConstraint(SimpleDurationConstraint c)
     {
 
 	}
 
-	public void PDDLPrint(PrintStream p, int indent)
+	public void pddlPrint(PrintStream s, int indent)
 	{
-		PDDLPrinter.printToString(this, p, true, false, indent);
+		PDDLPrinter.printToString(this, s, true, false, indent);
 	}
 
 	public String toString()
 	{
-		String str = "(" + MetricSymbolStore.getSymbol(type)+" " + variable.toString() +" "+value.toString()+")";
-		return str;
+		return "(" + MetricSymbolStore.getSymbol(type) + " " + variable.toString() + " " + value.toString() + ")";
 	}
 
 	public String toStringTyped()
 	{
-		String str = "(" + MetricSymbolStore.getSymbol(type)+" " + variable.toStringTyped() +" "+value.toStringTyped()+")";
-		return str;
+		return "(" + MetricSymbolStore.getSymbol(type) + " " + variable.toStringTyped() + " " + value.toStringTyped() + ")";
 	}
 
 	public int hashCode()
 	{
-		int hash = 7;
-		hash = 31 * hash ^ type;
-		hash = 31 * hash ^ variable.hashCode();
-		hash = 31 * hash ^ value.hashCode();
+		int hash = 31 * 7 ^ type;
+		hash = 31 * (31 * hash ^ variable.hashCode()) ^ value.hashCode();
 		return hash;
 	}
 
-	public boolean equals(Object obj)
+	public boolean equals(Object o)
 	{
-		if (obj instanceof SimpleDurationConstraint)
+		if (o instanceof SimpleDurationConstraint)
 		{
-			SimpleDurationConstraint c = (SimpleDurationConstraint) obj;
+			SimpleDurationConstraint c = (SimpleDurationConstraint) o;
 			return (type == c.type && variable.equals(c.variable) && value.equals(c.value));
 		}
 		else return false;

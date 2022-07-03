@@ -36,7 +36,7 @@ import javaff.data.Action;
 
 public class NullFilter implements Filter
 {
-	private static NullFilter nf = null;
+	private static NullFilter nf;
 
 	private NullFilter()
 	{
@@ -48,15 +48,15 @@ public class NullFilter implements Filter
 		return nf;
 	}
 
-	public Set getActions(State S)
+	public Set getActions(State s)
 	{
-		Set actionsFromS = S.getActions(); // get the logically appicable actions in S
+		Set actionsFromS = s.getActions(); // get the logically appicable actions in S
 		Set ns = new HashSet();
 		Iterator ait = actionsFromS.iterator(); // Get an iterator over these actions
 		while (ait.hasNext())
 		{
 			Action a = (Action) ait.next();
-			if (a.isApplicable(S)) ns.add(a); // Check they are applicable (will check numeric/temporal constraints)
+			if (a.isApplicable(s)) ns.add(a); // Check they are applicable (will check numeric/temporal constraints)
 		}
 		return ns;
 	}

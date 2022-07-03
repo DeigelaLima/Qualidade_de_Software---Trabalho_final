@@ -41,9 +41,9 @@ public interface Function
 	public String toStringTyped();
 	public Function ground(Map varMap);
 	public Function staticify(Map fValues);
-	public boolean effectedBy(ResourceOperator ro);
-	public Function replace(ResourceOperator ro); //replaces the resource for the change
+	public boolean effectedBy(ResourceOperator o);
+	public Function replace(ResourceOperator o); //replaces the resource for the change
 	public Function makeOnlyDurationDependent(MetricState s);
-	public BigDecimal getMaxValue(MatrixSTN stn);
-	public BigDecimal getMinValue(MatrixSTN stn);
+	public BigDecimal getMaxValue(MatrixSTN n);
+	public BigDecimal getMinValue(MatrixSTN n);
 }

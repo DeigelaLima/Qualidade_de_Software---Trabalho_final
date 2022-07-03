@@ -44,9 +44,7 @@ public class PDDLObject extends javaff.data.Parameter
 
 	public int hashCode()
     {
-		int hash = 10;
-		hash = 31 * hash ^ name.hashCode();
-		hash = 31 * hash ^ type.hashCode();
-		return hash;
+		int hash = 31 * 10 ^ name.hashCode();
+		return hash = 31 * hash ^ type.hashCode();
 	}
 }

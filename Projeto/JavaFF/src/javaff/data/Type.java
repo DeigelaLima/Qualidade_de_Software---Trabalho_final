@@ -40,8 +40,8 @@ public abstract class Type implements PDDLPrintable
 
 	public abstract String toStringTyped();
 
-	public void PDDLPrint(PrintStream p, int indent)
+	public void pddlPrint(PrintStream s, int indent)
 	{
-		PDDLPrinter.printToString(this, p, true, false, indent);
+		PDDLPrinter.printToString(this, s, true, false, indent);
 	}
 }

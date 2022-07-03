@@ -36,7 +36,7 @@ import javaff.data.Action;
 
 public class HelpfulFilter implements Filter
 {
-	private static HelpfulFilter hf = null;
+	private static HelpfulFilter hf;
 
 	private HelpfulFilter()
 	{
@@ -48,16 +48,16 @@ public class HelpfulFilter implements Filter
 		return hf;
 	}
 
-	public Set getActions(State S)
+	public Set getActions(State s)
 	{
-		STRIPSState SS = (STRIPSState) S;
+		STRIPSState SS = (STRIPSState) s;
 		SS.calculateRP(); // get the relaxed plan to the goal, to make sure helpful actions exist for S
 		Set ns = new HashSet();
 		Iterator ait = SS.helpfulActions.iterator(); // iterate over helpful actions
 		while (ait.hasNext())
 		{
 			Action a = (Action) ait.next();
-			if (a.isApplicable(S)) ns.add(a); // and add them to the set to return if they're applicable
+			if (a.isApplicable(s)) ns.add(a); // and add them to the set to return if they're applicable
 		}
 		return ns;
 	}

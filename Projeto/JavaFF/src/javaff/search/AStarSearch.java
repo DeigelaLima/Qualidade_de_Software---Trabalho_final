@@ -35,71 +35,63 @@ import java.util.TreeSet;
 import javaff.planning.Filter;
 import javaff.planning.State;
 
+public class AStarSearch extends Search {
 
-public class AStarSearch extends Search
-{
-	
 	protected Hashtable closed;
 	protected TreeSet open;
-	protected Filter filter = null;
-	
-	public AStarSearch(State s)
-    {
-		this(s, new HValueComparatorAStartSearch());
+	protected Filter filter;
+
+	public AStarSearch(State state) {
+		this(state, new HValueComparatorAStartSearch());
 	}
 
-	public AStarSearch(State s, Comparator c)
-    {
-		super(s);
-		setComparator(c);
-		
+	public AStarSearch(State state, Comparator comparator) {
+		super(state);
+		setComparator(comparator);
+
 		closed = new Hashtable();
-		open = new TreeSet(comp);
+		open = new TreeSet(comparator);
 	}
 
-	public void setFilter(Filter f)
-	{
-		filter = f;
+	public void setFilter(Filter f) {
+		this.filter = f;
 	}
 
-	public void updateOpen(State S)
-    {
-		open.addAll(S.getNextStates(filter.getActions(S)));
+	public void updateOpen(State s) {
+		open.addAll(s.getNextStates(filter.getActions(s)));
 	}
 
-	public State removeNext()
-    {
-		State S = (State) ((TreeSet) open).first();
-		open.remove(S);
- 		return S;
+	public State removeNext() {
+		State state = (State) ((TreeSet) open).first();
+		open.remove(state);
+		return state;
 	}
 
 	public boolean needToVisit(State s) {
-		Integer Shash = new Integer(s.hashCode());
-		State D = (State) closed.get(Shash);
-		
-		if (closed.containsKey(Shash) && D.equals(s)) return false;
-		
-		closed.put(Shash, s);
+		Integer shash = Integer.valueOf(s.hashCode());
+		State dState = (State) closed.get(shash);
+
+		if (closed.containsKey(shash) && dState.equals(s))
+			return false;
+
+		closed.put(shash, s);
 		return true;
 	}
 
 	public State search() {
-		
+
 		open.add(start);
 
-		while (!open.isEmpty())
-		{
+		while (!open.isEmpty()) {
 			State s = removeNext();
 			if (needToVisit(s)) {
 				++nodeCount;
 				if (s.goalReached()) {
 					return s;
-				} else {
-					updateOpen(s);
 				}
+				updateOpen(s);
 			}
-			
+
 		}
 		return null;
 	}

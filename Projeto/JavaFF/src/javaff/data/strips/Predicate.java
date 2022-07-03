@@ -46,20 +46,20 @@ public class Predicate extends Literal implements UngroundCondition, UngroundEff
 		name = p;
 	}
 
-	public boolean effects(PredicateSymbol ps)
+	public boolean effects(PredicateSymbol s)
     {
-		return name.equals(ps);
+		return name.equals(s);
 	}
 
-	public UngroundCondition minus(UngroundEffect effect)
+	public UngroundCondition minus(UngroundEffect e)
     {
-		return effect.effectsAdd(this);
+		return e.effectsAdd(this);
     }
 
-	public UngroundCondition effectsAdd(UngroundCondition cond)
+	public UngroundCondition effectsAdd(UngroundCondition c)
     {
-		if (this.equals(cond)) return TrueCondition.getInstance();
-		else return cond;
+		if (this.equals(c)) return TrueCondition.getInstance();
+		else return c;
     }
 
 	public Set getStaticPredicates()
@@ -72,18 +72,15 @@ public class Predicate extends Literal implements UngroundCondition, UngroundEff
 	public Proposition ground(Map varMap)
     {
 		Proposition p = new Proposition(name);
-		Iterator pit = parameters.iterator();
-		while (pit.hasNext())
-		{
-                        Object o = pit.next();
-                        PDDLObject po;
-                        if (o instanceof PDDLObject) po = (PDDLObject) o;
-                        else 
-                        {
-                           Variable v = (Variable) o;                          
-                           po = (PDDLObject) varMap.get(v);
-                        }
-                        
+		for (Iterator pit = parameters.iterator(); pit.hasNext();) {
+			Object o = pit.next();
+			PDDLObject po;
+			if (o instanceof PDDLObject)
+				po = (PDDLObject) o;
+			else {
+				Variable v = (Variable) o;
+				po = (PDDLObject) varMap.get(v);
+			}
 			p.addParameter(po);
 		}
 		return p;
@@ -101,10 +98,8 @@ public class Predicate extends Literal implements UngroundCondition, UngroundEff
 
 	public int hashCode()
     {
-		int hash = 5;
-		hash = 31 * hash ^ name.hashCode();
-		hash = 31 * hash ^ parameters.hashCode();
-		return hash;
+		int hash = 31 * 5 ^ name.hashCode();
+		return hash = 31 * hash ^ parameters.hashCode();
 	}
 
 }

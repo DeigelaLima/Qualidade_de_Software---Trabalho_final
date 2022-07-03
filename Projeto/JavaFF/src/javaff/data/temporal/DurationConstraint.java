@@ -39,122 +39,95 @@ import javaff.data.PDDLPrintable;
 import javaff.data.PDDLPrinter;
 import javaff.planning.MetricState;
 
-public class DurationConstraint implements PDDLPrintable
-{
+public class DurationConstraint implements PDDLPrintable {
 	Set constraints = new HashSet();
 
-	public boolean staticDuration()
-	{
+	public boolean staticDuration() {
 		boolean rTest = true;
-		Iterator cit = constraints.iterator();
-		while (cit.hasNext() && rTest)
-		{
+		for (Iterator cit = constraints.iterator(); cit.hasNext() && rTest;) {
 			SimpleDurationConstraint c = (SimpleDurationConstraint) cit.next();
 			rTest = c.staticDuration();
 		}
 		return rTest;
 	}
 
-	public void add(SimpleDurationConstraint sdc)
-	{
-		constraints.add(sdc);
+	public void add(SimpleDurationConstraint c) {
+		constraints.add(c);
 	}
 
-	public DurationConstraint ground(Map varMap)
-	{
+	public DurationConstraint ground(Map varMap) {
 		DurationConstraint dc = new DurationConstraint();
-		Iterator cit = constraints.iterator();
-		while (cit.hasNext())
-		{
+		for (Iterator cit = constraints.iterator(); cit.hasNext();) {
 			SimpleDurationConstraint c = (SimpleDurationConstraint) cit.next();
 			dc.add((SimpleDurationConstraint) c.ground(varMap));
 		}
-		return dc;	
+		return dc;
 	}
 
-	public BigDecimal getDuration(MetricState ms)
-	{
-		return getMaxDuration(ms);
+	public BigDecimal getDuration(MetricState s) {
+		return getMaxDuration(s);
 	}
 
-	public BigDecimal getMaxDuration(MetricState ms)
-	{
-		BigDecimal sofar = javaff.JavaFF.MAX_DURATION;
+	public BigDecimal getMaxDuration(MetricState s) {
+		BigDecimal sofar = javaff.JavaFF.maxDuration;
 		Iterator cit = constraints.iterator();
-		while (cit.hasNext())
-		{
+		while (cit.hasNext()) {
 			SimpleDurationConstraint c = (SimpleDurationConstraint) cit.next();
-			BigDecimal ndec = c.getMaxDuration(ms);
+			BigDecimal ndec = c.getMaxDuration(s);
 			sofar = sofar.min(ndec);
 		}
 		return sofar;
 	}
 
-	public BigDecimal getMinDuration(MetricState ms)
-	{
+	public BigDecimal getMinDuration(MetricState s) {
 		BigDecimal sofar = new BigDecimal(0);
 		Iterator cit = constraints.iterator();
-		while (cit.hasNext())
-		{
+		while (cit.hasNext()) {
 			SimpleDurationConstraint c = (SimpleDurationConstraint) cit.next();
-			BigDecimal ndec = c.getMinDuration(ms);
+			BigDecimal ndec = c.getMinDuration(s);
 			sofar = sofar.max(ndec);
 		}
 		return sofar;
 	}
 
-	public void PDDLPrint(PrintStream p, int indent)
-	{
-		p.println("(and ");
+	public void pddlPrint(PrintStream s, int indent) {
+		s.println("(and ");
 		Iterator cit = constraints.iterator();
-		while (cit.hasNext())
-		{
+		while (cit.hasNext()) {
 			SimpleDurationConstraint c = (SimpleDurationConstraint) cit.next();
-			PDDLPrinter.printToString(c, p, false, false, indent);
+			PDDLPrinter.printToString(c, s, false, false, indent);
 		}
-		p.print(")");
+		s.print(")");
 	}
 
-	public String toString()
-	{
+	public String toString() {
 		String str = "(and ";
-		Iterator cit = constraints.iterator();
-		while (cit.hasNext())
-		{
+		for (Iterator cit = constraints.iterator(); cit.hasNext();) {
 			SimpleDurationConstraint c = (SimpleDurationConstraint) cit.next();
 			str += c.toString();
 		}
-		str += ")";
-		return str;
+		return str += ")";
 	}
-	
-	public String toStringTyped()
-	{
+
+	public String toStringTyped() {
 		String str = "(and ";
-		Iterator cit = constraints.iterator();
-		while (cit.hasNext())
-		{
+		for (Iterator cit = constraints.iterator(); cit.hasNext();) {
 			SimpleDurationConstraint c = (SimpleDurationConstraint) cit.next();
 			str += c.toStringTyped();
 		}
-		str += ")";
-		return str;
+		return str += ")";
 	}
 
-	public int hashCode()
-	{
-		int hash = 7;
-		hash = 31 * hash ^ constraints.hashCode();
+	public int hashCode() {
+		int hash = 31 * 7 ^ constraints.hashCode();
 		return hash;
 	}
 
-	public boolean equals(Object obj)
-	{
-		if (obj instanceof DurationConstraint)
-		{
-			DurationConstraint c = (DurationConstraint) obj;
+	public boolean equals(Object o) {
+		if (o instanceof DurationConstraint) {
+			DurationConstraint c = (DurationConstraint) o;
 			return c.constraints.equals(constraints);
-		}
-		else return false;
+		} else
+			return false;
 	}
 }

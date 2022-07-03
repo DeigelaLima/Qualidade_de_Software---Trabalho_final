@@ -28,7 +28,6 @@
 
 package javaff.data;
 
-public interface Condition extends PDDLPrintable
-{
-	public boolean isStatic();      // returns whether this condition is static
+public interface Condition extends PDDLPrintable {
+	boolean isStatic(); // returns whether this condition is static
 }

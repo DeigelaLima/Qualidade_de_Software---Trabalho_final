@@ -33,13 +33,18 @@ import java.util.Set;
 
 import javaff.planning.State;
 
-public interface GroundEffect extends Effect
-{
+public interface GroundEffect {
 	public void apply(State s); // carry out the effects of this on State s
+
 	public void applyAdds(State s);
+
 	public void applyDels(State s);
+
 	public Set getAddPropositions();
+
 	public Set getDeletePropositions();
-    public Set getOperators();
+
+	public Set getOperators();
+
 	public GroundEffect staticifyEffect(Map fValues);
 }

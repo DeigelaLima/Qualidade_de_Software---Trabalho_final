@@ -58,9 +58,7 @@ public abstract class State implements Cloneable
 	public Set getNextStates(Set actions)      // get all the states after applying this set of actions
 	{
 		Set rSet = new HashSet();
-		Iterator ait = actions.iterator();
-		while (ait.hasNext())
-		{
+		for (Iterator ait = actions.iterator(); ait.hasNext();) {
 			Action a = (Action) ait.next();
 			rSet.add(this.apply(a));
 		}
@@ -85,7 +83,7 @@ public abstract class State implements Cloneable
 
 	public boolean goalReached()
 	{
-		return goal.isTrue(this);
+		return goal.stateIsTrue(this);
 	}
 
 	public abstract Plan getSolution();

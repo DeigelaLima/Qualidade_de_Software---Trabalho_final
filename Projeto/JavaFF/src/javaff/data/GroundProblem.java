@@ -53,7 +53,7 @@ public class GroundProblem
     public GroundCondition goal;
     public Set initial;                                // (Proposition)
 
-	public TemporalMetricState state = null;
+	public TemporalMetricState state;
 
 	public GroundProblem(Set a, Set i, GroundCondition g, Map f, Metric m)
 	{
@@ -80,32 +80,27 @@ public class GroundProblem
 
 	public TemporalMetricState getTemporalMetricInitialState()
     {
-		if (state == null)
-		{
-			Set na = new HashSet();
-			Set ni = new HashSet();
-			Iterator ait = actions.iterator();
-			while (ait.hasNext())
-			{
-				Action act = (Action) ait.next();
-				if (act instanceof InstantAction)
-				{
-					na.add(act);
-					ni.add(act);
-				}
-				else if (act instanceof DurativeAction)
-				{
-					DurativeAction dact = (DurativeAction) act;
-					na.add(dact.startAction);
-					na.add(dact.endAction);
-					ni.add(dact.startAction);
-				}
+		if (state != null)
+			return state;
+		Set na = new HashSet();
+		Set ni = new HashSet();
+		Iterator ait = actions.iterator();
+		while (ait.hasNext()) {
+			Action act = (Action) ait.next();
+			if (act instanceof InstantAction) {
+				na.add(act);
+				ni.add(act);
+			} else if (act instanceof DurativeAction) {
+				DurativeAction dact = (DurativeAction) act;
+				na.add(dact.startAction);
+				na.add(dact.endAction);
+				ni.add(dact.startAction);
 			}
-			TemporalMetricState ts = new TemporalMetricState(ni, initial, goal, functionValues, metric);
-			GroundProblem gp = new GroundProblem(na, initial, goal, functionValues, metric);
-			ts.setRPG(new RelaxedTemporalMetricPlanningGraph(gp));
-			state = ts;
 		}
+		TemporalMetricState ts = new TemporalMetricState(ni, initial, goal, functionValues, metric);
+		GroundProblem gp = new GroundProblem(na, initial, goal, functionValues, metric);
+		ts.setRPG(new RelaxedTemporalMetricPlanningGraph(gp));
+		state = ts;
 		return state;
 	}
 

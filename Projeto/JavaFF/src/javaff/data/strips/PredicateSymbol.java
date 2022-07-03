@@ -61,9 +61,7 @@ public class PredicateSymbol implements PDDLPrintable
 	public String toStringTyped()
 	{
 		String str = name;
-		Iterator it = params.iterator();
-		while (it.hasNext())
-		{
+		for (Iterator it = params.iterator(); it.hasNext();) {
 			Variable v = (Variable) it.next();
 			str += " " + v.toStringTyped();
 		}
@@ -85,11 +83,11 @@ public class PredicateSymbol implements PDDLPrintable
 		params.add(v);
 	}
 
-	public boolean equals(Object obj)
+	public boolean equals(Object o)
 	{
-		if (obj instanceof PredicateSymbol)
+		if (o instanceof PredicateSymbol)
 		{
-			PredicateSymbol ps = (PredicateSymbol) obj;
+			PredicateSymbol ps = (PredicateSymbol) o;
 			return (name.equals(ps.name) && params.equals(ps.params));
 		}
 		else return false;
@@ -97,14 +95,12 @@ public class PredicateSymbol implements PDDLPrintable
 
 	public int hashCode()
 	{
-		int hash = 8;
-		hash = 31 * hash ^ name.hashCode();
-		hash = 31 * hash ^ params.hashCode();
-		return hash;
+		int hash = 31 * 8 ^ name.hashCode();
+		return hash = 31 * hash ^ params.hashCode();
 	}
 
-	public void PDDLPrint(PrintStream p, int indent)
+	public void pddlPrint(PrintStream s, int indent)
 	{
-		PDDLPrinter.printToString(this, p, true, true, indent);
+		PDDLPrinter.printToString(this, s, true, true, indent);
 	}
 }

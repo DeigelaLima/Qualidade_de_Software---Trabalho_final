@@ -32,5 +32,5 @@ import java.util.Set;
 
 public interface Filter
 {
-	public Set getActions(State S); // simple method: takes a state S, returns a Set of states in its neighbourhood
+	public Set getActions(State s); // simple method: takes a state S, returns a Set of states in its neighbourhood
 } 

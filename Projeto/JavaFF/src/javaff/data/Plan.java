@@ -34,7 +34,7 @@ import java.util.Set;
 
 public interface Plan extends Cloneable
 {
-	public abstract void print(PrintStream p);
-	public abstract void print(PrintWriter p);
+	public abstract void print(PrintStream s);
+	public abstract void print(PrintWriter w);
 	public abstract Set getActions();
 }

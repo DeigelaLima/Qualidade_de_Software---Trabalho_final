@@ -37,77 +37,62 @@ import java.util.List;
 import java.util.ListIterator;
 import java.util.Set;
 
-public class TotalOrderPlan implements Plan, Cloneable
-{
+public class TotalOrderPlan implements Plan, Cloneable {
 	private List plan = new ArrayList();
 
-	public Object clone()
-	{
+	public Object clone() {
 		TotalOrderPlan rTOP = new TotalOrderPlan();
 		rTOP.plan = (List) ((ArrayList) plan).clone();
 		return rTOP;
 	}
 
-	public void addAction(Action a)
-	{
+	public void addAction(Action a) {
 		plan.add(a);
 	}
 
-	public int getPlanLength()
-	{
+	public int getPlanLength() {
 		return plan.size();
 	}
 
-	public Iterator iterator()
-	{
+	public Iterator iterator() {
 		return plan.iterator();
 	}
 
-	public ListIterator listIteratorEnd()
-	{
+	public ListIterator listIteratorEnd() {
 		return plan.listIterator(plan.size());
 	}
 
-	public ListIterator listIterator(Action a)
-	{
+	public ListIterator listIterator(Action a) {
 		return plan.listIterator(plan.indexOf(a));
 	}
 
-	public Set getActions()
-	{
+	public Set getActions() {
 		return new HashSet(plan);
 	}
-	
-	public boolean equals(Object obj)
-    {
-        if (obj instanceof TotalOrderPlan)
-		{
-			TotalOrderPlan p = (TotalOrderPlan) obj;
+
+	public boolean equals(Object o) {
+		if (o instanceof TotalOrderPlan) {
+			TotalOrderPlan p = (TotalOrderPlan) o;
 			return (plan.equals(p.plan));
-		}
-		else return false;
-    }
+		} else
+			return false;
+	}
 
-    public int hashCode()
-    {
-        return plan.hashCode();
-    }
+	public int hashCode() {
+		return plan.hashCode();
+	}
 
-	public void print(PrintStream ps)
-	{
+	public void print(PrintStream s) {
 		Iterator pit = plan.iterator();
-		while (pit.hasNext())
-		{
-			ps.println("("+pit.next()+")");
+		while (pit.hasNext()) {
+			s.println("(" + pit.next() + ")");
 		}
 	}
 
-	public void print(PrintWriter pw)
-	{
+	public void print(PrintWriter w) {
 		Iterator pit = plan.iterator();
-		while (pit.hasNext())
-		{
-			pw.println("("+pit.next()+")");
+		while (pit.hasNext()) {
+			w.println("(" + pit.next() + ")");
 		}
 	}
 }

@@ -71,9 +71,9 @@ public class UngroundDurativeAction extends Operator
 		duration = new DurationFunction(this);
 	}
 
-	public boolean effects(PredicateSymbol ps)
+	public boolean effects(PredicateSymbol s)
 	{
-		return (startEffect.effects(ps) || endEffect.effects(ps));
+		return (startEffect.effects(s) || endEffect.effects(s));
 	}
 
 	public Action ground(Map varMap)
@@ -81,9 +81,7 @@ public class UngroundDurativeAction extends Operator
 		DurativeAction a = new DurativeAction();
 		a.name = this.name;
 
-		Iterator pit = params.iterator();
-		while (pit.hasNext())
-		{
+		for (Iterator pit = params.iterator(); pit.hasNext();) {
 			Variable v = (Variable) pit.next();
 			PDDLObject o = (PDDLObject) varMap.get(v);
 			a.params.add(o);
@@ -109,8 +107,7 @@ public class UngroundDurativeAction extends Operator
 		a.dummyJoin = dummyJoin.ground(varMap);
 		a.dummyGoal = dummyGoal.ground(varMap);
 
-		a.startAction.parent = a;
-		a.endAction.parent = a;
+		a.endAction.parent = a.startAction.parent = a;
 		
 		return a;
 	}
@@ -167,44 +164,42 @@ public class UngroundDurativeAction extends Operator
 	}
 
 	//WARNING - This is right either (at start condition) (at end effect) etc....
-	public void PDDLPrint(java.io.PrintStream p, int indent)
+	public void pddlPrint(java.io.PrintStream s, int indent)
 	{
-		p.println();
-		PDDLPrinter.printIndent(p, indent);
-		p.print("(:durative-action ");
-		p.print(name);
-		p.println();
-		PDDLPrinter.printIndent(p, indent+1);
-		p.print(":parameters(\n");
-		PDDLPrinter.printToString(params, p, true, false, indent+2);
-		p.println(")");
-		PDDLPrinter.printIndent(p, indent+1);
-		p.print(":duration(\n");
-		PDDLPrinter.printToString(durationConstraint, p, true, false, indent+2);
-		p.println(")");
-		PDDLPrinter.printIndent(p, indent+1);
-		p.print(":condition");
+		s.println();
+		PDDLPrinter.printIndent(s, indent);
+		s.print("(:durative-action ");
+		s.print(name);
+		s.println();
+		PDDLPrinter.printIndent(s, indent+1);
+		s.print(":parameters(\n");
+		PDDLPrinter.printToString(params, s, true, false, indent+2);
+		s.println(")");
+		PDDLPrinter.printIndent(s, indent+1);
+		s.print(":duration(\n");
+		PDDLPrinter.printToString(durationConstraint, s, true, false, indent+2);
+		s.println(")");
+		PDDLPrinter.printIndent(s, indent+1);
+		s.print(":condition");
 		//condition.PDDLPrint(p, indent+2);
-		p.println();
-		PDDLPrinter.printIndent(p, indent+1);
-		p.print(":effect");
+		s.println();
+		PDDLPrinter.printIndent(s, indent+1);
+		s.print(":effect");
 		//effect.PDDLPrint(p, indent+2);
-		p.print(")");
+		s.print(")");
 	}
 
 	public int hashCode()
 	{
-		int hash = 3;
-		hash = 31 * hash ^ name.hashCode();
-		hash = 31 * hash ^ params.hashCode();
-		return hash;
+		int hash = 31 * 3 ^ name.hashCode();
+		return hash = 31 * hash ^ params.hashCode();
 	}
 
-	public boolean equals(Object obj)
+	public boolean equals(Object o)
 	{
-		if (obj instanceof UngroundDurativeAction)
+		if (o instanceof UngroundDurativeAction)
 		{
-			UngroundDurativeAction a = (UngroundDurativeAction) obj;
+			UngroundDurativeAction a = (UngroundDurativeAction) o;
 			return (name.equals(a.name) && params.equals(a.params));
 		}
 		else return false;

@@ -35,5 +35,5 @@ public interface UngroundCondition extends Condition
 {
 	public GroundCondition groundCondition(Map varMap);
 	public Set getStaticPredicates();
-	public UngroundCondition minus(UngroundEffect effect);
+	public UngroundCondition minus(UngroundEffect e);
 }

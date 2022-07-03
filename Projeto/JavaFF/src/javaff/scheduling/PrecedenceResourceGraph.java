@@ -46,146 +46,113 @@ import javaff.data.temporal.DurativeAction;
 //OK for new precedence relations (i.e. meetCosntraints) should move consumers to AFTER the >= etc..) (actually maybe no)
 // AND for the new bounds should do incremental sweeps as in precedence relations
 
-public class PrecedenceResourceGraph
-{
+public class PrecedenceResourceGraph {
 	public Map operators = new Hashtable();
 	public Map conditions = new Hashtable();
-	public Map states = new Hashtable();          // Maps (Operators || Conditions => States)
+	public Map states = new Hashtable(); // Maps (Operators || Conditions => States)
 
 	public MatrixSTN stn;
 
-	public PrecedenceResourceGraph(MatrixSTN s)
-	{
+	public PrecedenceResourceGraph(MatrixSTN s) {
 		stn = s;
 	}
 
-	public void addCondition(BinaryComparator bc, Action a)
-	{
-		conditions.put(bc, a);
+	public void addCondition(BinaryComparator c, Action a) {
+		conditions.put(c, a);
 	}
 
-	public void addOperator(ResourceOperator ro, Action a)
-	{
-		operators.put(ro, a);
+	public void addOperator(ResourceOperator o, Action a) {
+		operators.put(o, a);
 	}
 
-	public boolean meetConditions()
-	{
+	public boolean meetConditions() {
 		boolean changed = false;
-		Iterator bcit = conditions.keySet().iterator();
-		while (bcit.hasNext())
-		{
+		for (Iterator bcit = conditions.keySet().iterator(); bcit.hasNext();) {
 			BinaryComparator bc = (BinaryComparator) bcit.next();
 			BigDecimal comp = bc.second.getValue(null);
 			Action a = (Action) conditions.get(bc);
-			
-			if (bc.type == MetricSymbolStore.LESS_THAN || bc.type == MetricSymbolStore.LESS_THAN_EQUAL)
-			{
+			if (bc.type == MetricSymbolStore.lessThan || bc.type == MetricSymbolStore.lessThanEqual) {
 				BigDecimal value = findBeforeMin(a);
-
-				if (value.compareTo(comp) >= 0)
-				{
-					//move an unordered consumer back
+				if (value.compareTo(comp) >= 0) {
 					Set u = getUnorderedConsumers(a);
 					Action a2 = stn.getEarliest(u);
-					stn.addConstraint(TemporalConstraint.getConstraint((InstantAction)a2, (InstantAction)a));
+					stn.addConstraint(TemporalConstraint.getConstraint((InstantAction) a2, (InstantAction) a));
 					changed = true;
 				}
-			}
-			else if (bc.type == MetricSymbolStore.GREATER_THAN || bc.type == MetricSymbolStore.GREATER_THAN_EQUAL)
-			{
+			} else if (bc.type == MetricSymbolStore.greaterThan || bc.type == MetricSymbolStore.greaterThanEqual) {
 				BigDecimal value = findBeforeMax(a);
-				if (value.compareTo(comp) <= 0)
-				{
-					//move an unordered producer back
+				if (value.compareTo(comp) <= 0) {
 					Set u = getUnorderedProducers(a);
 					Action a2 = stn.getEarliest(u);
-					stn.addConstraint(TemporalConstraint.getConstraint((InstantAction)a2, (InstantAction)a));
-					changed = true;	
+					stn.addConstraint(TemporalConstraint.getConstraint((InstantAction) a2, (InstantAction) a));
+					changed = true;
 				}
 			}
 		}
 		return changed;
 	}
 
-	private BigDecimal findBeforeMax(Action a)
-	{
+	private BigDecimal findBeforeMax(Action a) {
 		BigDecimal value = new BigDecimal(0);
-		Iterator opit = operators.keySet().iterator();
-		while (opit.hasNext())
-		{
+		for (Iterator opit = operators.keySet().iterator(); opit.hasNext();) {
 			ResourceOperator ro = (ResourceOperator) opit.next();
 			Action a2 = (Action) operators.get(ro);
-			if (ro.type == MetricSymbolStore.INCREASE || ro.type == MetricSymbolStore.SCALE_UP)
-			{
-				if (stn.B(a2,a) || stn.BS(a2,a) ) value = ro.applyMax(value, stn); // WARNING This is not taking into the account the order of the actions
-
-			}
-			else if (ro.type == MetricSymbolStore.DECREASE || ro.type == MetricSymbolStore.SCALE_DOWN)
-			{
-				if (stn.B(a2,a)) value = ro.applyMin(value, stn);
+			if (ro.type == MetricSymbolStore.increase || ro.type == MetricSymbolStore.scaleUP) {
+				if (stn.isMinOrZero(a2, a) || stn.bS(a2, a))
+					value = ro.applyMax(value, stn);
+			} else if (ro.type == MetricSymbolStore.decrease || ro.type == MetricSymbolStore.scaleDown) {
+				if (stn.isMinOrZero(a2, a))
+					value = ro.applyMin(value, stn);
 			}
 		}
 		return value;
 	}
 
-	private BigDecimal findBeforeMin(Action a)
-	{
+	private BigDecimal findBeforeMin(Action a) {
 		BigDecimal value = new BigDecimal(0);
-		Iterator opit = operators.keySet().iterator();
-		while (opit.hasNext())
-		{
+		for (Iterator opit = operators.keySet().iterator(); opit.hasNext();) {
 			ResourceOperator ro = (ResourceOperator) opit.next();
 			Action a2 = (Action) operators.get(ro);
-			if (ro.type == MetricSymbolStore.INCREASE || ro.type == MetricSymbolStore.SCALE_UP)
-			{
-				if (stn.B(a2,a)) value = ro.applyMin(value, stn); // WARNING This is not taking into the account the order of the actions
-			}
-			else if (ro.type == MetricSymbolStore.DECREASE || ro.type == MetricSymbolStore.SCALE_DOWN)
-			{
-				if (stn.B(a2,a) || stn.BS(a2,a)) value = ro.applyMax(value, stn);
+			if (ro.type == MetricSymbolStore.increase || ro.type == MetricSymbolStore.scaleUP) {
+				if (stn.isMinOrZero(a2, a))
+					value = ro.applyMin(value, stn);
+			} else if (ro.type == MetricSymbolStore.decrease || ro.type == MetricSymbolStore.scaleDown) {
+				if (stn.isMinOrZero(a2, a) || stn.bS(a2, a))
+					value = ro.applyMax(value, stn);
 			}
 		}
 		return value;
 	}
 
-	
-	private Set getUnorderedProducers(Action a)
-	{
+	private Set getUnorderedProducers(Action a) {
 		Set rSet = new HashSet();
-		Iterator opit = operators.keySet().iterator();
-		while (opit.hasNext())
-		{
+		for (Iterator opit = operators.keySet().iterator(); opit.hasNext();) {
 			ResourceOperator ro = (ResourceOperator) opit.next();
 			Action a2 = (Action) operators.get(ro);
-			boolean condition = (ro.type == MetricSymbolStore.INCREASE || ro.type == MetricSymbolStore.SCALE_UP) && stn.U(a2,a);
+			boolean condition = (ro.type == MetricSymbolStore.increase || ro.type == MetricSymbolStore.scaleUP)
+					&& stn.U(a2, a);
 			if (condition)
 				rSet.add(a2);
 		}
 		return rSet;
 	}
 
-	private Set getUnorderedConsumers(Action a)
-	{
+	private Set getUnorderedConsumers(Action a) {
 		Set rSet = new HashSet();
-		Iterator opit = operators.keySet().iterator();
-		while (opit.hasNext())
-		{
+		for (Iterator opit = operators.keySet().iterator(); opit.hasNext();) {
 			ResourceOperator ro = (ResourceOperator) opit.next();
 			Action a2 = (Action) operators.get(ro);
-			boolean condition = (ro.type == MetricSymbolStore.DECREASE || ro.type == MetricSymbolStore.SCALE_DOWN) && stn.U(a2,a);
+			boolean condition = (ro.type == MetricSymbolStore.decrease || ro.type == MetricSymbolStore.scaleDown)
+					&& stn.U(a2, a);
 			if (condition)
 				rSet.add(a2);
 		}
 		return rSet;
 	}
 
-	private Set getBeforeOperators(Action a)
-	{
+	private Set getBeforeOperators() {
 		Set rSet = new HashSet();
-		Iterator opit = operators.keySet().iterator();
-		while (opit.hasNext())
-		{
+		for (Iterator opit = operators.keySet().iterator(); opit.hasNext();) {
 			ResourceOperator ro = (ResourceOperator) opit.next();
 			Action a2 = (Action) operators.get(ro);
 			rSet.add(ro);
@@ -193,63 +160,47 @@ public class PrecedenceResourceGraph
 		return rSet;
 	}
 
-	
-
-	public boolean limitBounds()
-	{
+	public boolean limitBounds() {
 		boolean change = false;
-		Iterator bcit = conditions.keySet().iterator();
-		while (bcit.hasNext())
-		{
+		for (Iterator bcit = conditions.keySet().iterator(); bcit.hasNext();) {
 			BinaryComparator bc = (BinaryComparator) bcit.next();
-
 			BigDecimal comp = bc.second.getValue(null);
 			Action a = (Action) conditions.get(bc);
-
-			if (bc.type == MetricSymbolStore.LESS_THAN || bc.type == MetricSymbolStore.LESS_THAN_EQUAL)
-			{
+			if (bc.type == MetricSymbolStore.lessThan || bc.type == MetricSymbolStore.lessThanEqual) {
 				BigDecimal value = findBeforeMax(a);
-				if (value.compareTo(comp) > 0)
-				{
+				if (value.compareTo(comp) > 0) {
 					BigDecimal diff = value.subtract(comp);
-					//change an before producers back
-					Set u = getBeforeOperators(a);
+					Set u = getBeforeOperators();
 					Iterator uit = u.iterator();
-					while (uit.hasNext())
-					{
+					while (uit.hasNext()) {
 						ResourceOperator ro = (ResourceOperator) uit.next();
-						if (ro.change instanceof DurationFunction)
-						{
+						if (ro.change instanceof DurationFunction) {
 							DurationFunction df = (DurationFunction) ro.change;
 							DurativeAction da = df.durativeAction;
-							if (ro.type == MetricSymbolStore.INCREASE || ro.type == MetricSymbolStore.SCALE_UP) stn.decreaseMax(da, diff);
-							else if (ro.type == MetricSymbolStore.DECREASE || ro.type == MetricSymbolStore.SCALE_DOWN) stn.increaseMin(da, diff);
+							if (ro.type == MetricSymbolStore.increase || ro.type == MetricSymbolStore.scaleUP)
+								stn.decreaseMax(da, diff);
+							else if (ro.type == MetricSymbolStore.decrease || ro.type == MetricSymbolStore.scaleDown)
+								stn.increaseMin(da, diff);
 							change = true;
 							break;
 						}
 					}
 				}
-			}
-
-			
-			else if (bc.type == MetricSymbolStore.GREATER_THAN || bc.type == MetricSymbolStore.GREATER_THAN_EQUAL)
-			{
+			} else if (bc.type == MetricSymbolStore.greaterThan || bc.type == MetricSymbolStore.greaterThanEqual) {
 				BigDecimal value = findBeforeMin(a);
-				if (value.compareTo(comp) < 0)
-				{
+				if (value.compareTo(comp) < 0) {
 					BigDecimal diff = comp.subtract(value);
-					//change an before producers back
-					Set u = getBeforeOperators(a);
+					Set u = getBeforeOperators();
 					Iterator uit = u.iterator();
-					while (uit.hasNext())
-					{
+					while (uit.hasNext()) {
 						ResourceOperator ro = (ResourceOperator) uit.next();
-						if (ro.change instanceof DurationFunction)
-						{
+						if (ro.change instanceof DurationFunction) {
 							DurationFunction df = (DurationFunction) ro.change;
 							DurativeAction da = df.durativeAction;
-							if (ro.type == MetricSymbolStore.INCREASE || ro.type == MetricSymbolStore.SCALE_UP) stn.increaseMin(da, diff);
-							else if (ro.type == MetricSymbolStore.DECREASE || ro.type == MetricSymbolStore.SCALE_DOWN) stn.decreaseMax(da, diff);
+							if (ro.type == MetricSymbolStore.increase || ro.type == MetricSymbolStore.scaleUP)
+								stn.increaseMin(da, diff);
+							else if (ro.type == MetricSymbolStore.decrease || ro.type == MetricSymbolStore.scaleDown)
+								stn.decreaseMax(da, diff);
 							change = true;
 							break;
 						}
@@ -260,46 +211,32 @@ public class PrecedenceResourceGraph
 		return change;
 	}
 
-	public void minimize()
-	{
-		Iterator roit = operators.keySet().iterator();
-		while (roit.hasNext())
-		{
+	public void minimize() {
+		for (Iterator roit = operators.keySet().iterator(); roit.hasNext();) {
 			ResourceOperator ro = (ResourceOperator) roit.next();
-			if (ro.change instanceof DurationFunction)
-			{
-				DurativeAction da = ((DurationFunction)ro.change).durativeAction;
-				if (ro.type == MetricSymbolStore.INCREASE || ro.type == MetricSymbolStore.SCALE_UP)
-				{
+			if (ro.change instanceof DurationFunction) {
+				DurativeAction da = ((DurationFunction) ro.change).durativeAction;
+				if (ro.type == MetricSymbolStore.increase || ro.type == MetricSymbolStore.scaleUP) {
 					stn.minimize(da);
-				}
-				else if (ro.type == MetricSymbolStore.DECREASE || ro.type == MetricSymbolStore.SCALE_DOWN)
-				{
+				} else if (ro.type == MetricSymbolStore.decrease || ro.type == MetricSymbolStore.scaleDown) {
 					stn.maximize(da);
 				}
 			}
 		}
 	}
 
-	public void maximize()
-	{
-		Iterator roit = operators.keySet().iterator();
-		while (roit.hasNext())
-		{
+	public void maximize() {
+		for (Iterator roit = operators.keySet().iterator(); roit.hasNext();) {
 			ResourceOperator ro = (ResourceOperator) roit.next();
-			if (ro.change instanceof DurationFunction)
-			{
-				DurativeAction da = ((DurationFunction)ro.change).durativeAction;
-				if (ro.type == MetricSymbolStore.INCREASE || ro.type == MetricSymbolStore.SCALE_UP)
-				{
+			if (ro.change instanceof DurationFunction) {
+				DurativeAction da = ((DurationFunction) ro.change).durativeAction;
+				if (ro.type == MetricSymbolStore.increase || ro.type == MetricSymbolStore.scaleUP) {
 					stn.maximize(da);
-				}
-				else if (ro.type == MetricSymbolStore.DECREASE || ro.type == MetricSymbolStore.SCALE_DOWN)
-				{
+				} else if (ro.type == MetricSymbolStore.decrease || ro.type == MetricSymbolStore.scaleDown) {
 					stn.minimize(da);
 				}
 			}
 		}
 	}
-	
+
 }

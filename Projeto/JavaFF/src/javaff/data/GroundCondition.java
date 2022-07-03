@@ -33,10 +33,13 @@ import java.util.Set;
 
 import javaff.planning.State;
 
-public interface GroundCondition extends Condition
-{
-	public boolean isTrue(State s); // returns whether this conditions is true is State S
+public interface GroundCondition extends Condition {
+	// returns whether this conditions is true is State S
+	public boolean stateIsTrue(State s);
+
 	public Set getConditionalPropositions();
+
 	public Set getComparators();
+
 	public GroundCondition staticifyCondition(Map fValues);
 }

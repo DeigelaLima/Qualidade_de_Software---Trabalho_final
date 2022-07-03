@@ -41,22 +41,17 @@ import javaff.data.temporal.SplitInstantAction;
 import javaff.data.temporal.StartInstantAction;
 import javaff.planning.TemporalMetricState;
 
-public class VelosoSchedulabilityChecker implements SchedulabilityChecker, Cloneable 
-{
+public class VelosoSchedulabilityChecker implements SchedulabilityChecker, Cloneable {
 	protected Set entries;
 	protected boolean allGood = true;
 
-	public VelosoSchedulabilityChecker()
-	{
+	public VelosoSchedulabilityChecker() {
 		entries = new HashSet();
 	}
 
-	public Object clone()
-	{
+	public Object clone() {
 		VelosoSchedulabilityChecker v = new VelosoSchedulabilityChecker();
-		Iterator eit = entries.iterator();
-		while (eit.hasNext())
-		{
+		for (Iterator eit = entries.iterator(); eit.hasNext();) {
 			EnvelopeEntry ee = (EnvelopeEntry) eit.next();
 			v.entries.add(ee.clone());
 		}
@@ -64,102 +59,81 @@ public class VelosoSchedulabilityChecker implements SchedulabilityChecker, Clone
 		return v;
 	}
 
-	public boolean addAction(InstantAction a, TemporalMetricState s)
-	{
-		//if end, close envelope
-		if (a instanceof EndInstantAction)
-		{
+	public boolean addAction(InstantAction a, TemporalMetricState s) {
+		// if end, close envelope
+		if (a instanceof EndInstantAction) {
 			Iterator eit2 = entries.iterator();
 			Set over = new HashSet();
-			while (eit2.hasNext())
-			{
+			while (eit2.hasNext()) {
 				EnvelopeEntry e = (EnvelopeEntry) eit2.next();
-				if (e.end.equals(a)) over.add(e);
+				if (e.end.equals(a))
+					over.add(e);
 			}
 			entries.removeAll(over);
 		}
-		
-		//check each envelope to see if it must go in
-		Iterator eit = entries.iterator();
-		while (allGood && eit.hasNext())
-		{
+
+		for (Iterator eit = entries.iterator(); allGood && eit.hasNext();) {
 			EnvelopeEntry e = (EnvelopeEntry) eit.next();
-			e.add(a,s, this);
-			// if so, check for consistency
+			e.add(a, s, this);
 			allGood = e.check();
 		}
 
-		if (!allGood) return false;
+		if (!allGood)
+			return false;
 
-		
-
-		//if start, create a(ny) new envelope,
-		if (a instanceof StartInstantAction)
-		{
-			HashSet es = new HashSet();
-			Iterator eit2 = entries.iterator();
-			while (eit2.hasNext() && allGood)
-			{
-				EnvelopeEntry e = (EnvelopeEntry) eit2.next();
-				if (checkOrder(a,e.end))
-				{
-					StartInstantAction sa = ((StartInstantAction) a);
-					EnvelopeEntry ne = new EnvelopeEntry(e.start, sa.getSibling());
-					ne.maxEnv = sa.parent.getMaxDuration(s).add(e.maxEnv);
-					ne.minEnv = sa.parent.getMinDuration(s).add(e.minEnv);
-					ne.constraints.addAll(TemporalConstraint.getBounds(sa, sa.getSibling(), sa.parent.getMaxDuration(s), sa.parent.getMinDuration(s)));
-					ne.constraints.addAll(e.constraints);
-					ne.followsStart.addAll(e.followsStart);
-
-					Iterator fit = e.followsStart.iterator();
-					while (fit.hasNext())
-					{
-						InstantAction ia = (InstantAction)fit.next();
-						if (checkOrder(ia,ne.end)) ne.addPreceder(ia,s);
-					}
-
-					ne.constraints.add(TemporalConstraint.getConstraint(sa, e.end));
-
-					es.add(ne);
-
-					allGood = ne.check();
-
+		if (!(a instanceof StartInstantAction))
+			return allGood;
+		HashSet es = new HashSet();
+		Iterator eit2 = entries.iterator();
+		while (eit2.hasNext() && allGood) {
+			EnvelopeEntry e = (EnvelopeEntry) eit2.next();
+			if (checkOrder(a, e.end)) {
+				StartInstantAction sa = (StartInstantAction) a;
+				EnvelopeEntry ne = new EnvelopeEntry(e.start, sa.getSibling());
+				ne.maxEnv = sa.parent.getMaxDuration(s).add(e.maxEnv);
+				ne.minEnv = sa.parent.getMinDuration(s).add(e.minEnv);
+				ne.constraints.addAll(TemporalConstraint.getBounds(sa, sa.getSibling(), sa.parent.getMaxDuration(s),
+						sa.parent.getMinDuration(s)));
+				ne.constraints.addAll(e.constraints);
+				ne.followsStart.addAll(e.followsStart);
+				Iterator fit = e.followsStart.iterator();
+				while (fit.hasNext()) {
+					InstantAction ia = (InstantAction) fit.next();
+					if (checkOrder(ia, ne.end))
+						ne.addPreceder(ia, s);
 				}
+				ne.constraints.add(TemporalConstraint.getConstraint(sa, e.end));
+				es.add(ne);
+				allGood = ne.check();
 			}
-			entries.addAll(es);
-			entries.add(new EnvelopeEntry(((StartInstantAction) a), s));
-			
 		}
+		entries.addAll(es);
+		entries.add(new EnvelopeEntry((StartInstantAction) a, s));
 		return allGood;
-		
+
 	}
 
-	public boolean checkOrder(InstantAction a, InstantAction b)
-	{
-		if (a.equals(b)) return false;
-		else if (a instanceof SplitInstantAction && b instanceof SplitInstantAction)
-		{
-			if (((SplitInstantAction) a).parent.equals(((SplitInstantAction) b).parent)) return false;
+	public boolean checkOrder(InstantAction a, InstantAction b) {
+		if (a.equals(b))
+			return false;
+		else if (a instanceof SplitInstantAction && b instanceof SplitInstantAction) {
+			if (((SplitInstantAction) a).parent.equals(((SplitInstantAction) b).parent))
+				return false;
 		}
-		
 		Set addA = a.getAddPropositions();
 		addA.retainAll(b.getConditionalPropositions());
-
-		if (!addA.isEmpty()) return true;
-
+		if (!addA.isEmpty())
+			return true;
 		Set condA = a.getConditionalPropositions();
 		condA.retainAll(b.getDeletePropositions());
-		if (!condA.isEmpty()) return true;
-		
+		if (!condA.isEmpty())
+			return true;
 		Set delA = a.getDeletePropositions();
 		delA.retainAll(b.getAddPropositions());
-		if (!delA.isEmpty()) return true;
-
-		return false;
+		return !delA.isEmpty() ? true : false;
 	}
 
-	private class EnvelopeEntry implements Cloneable
-    {
+	private class EnvelopeEntry implements Cloneable {
 		public InstantAction start;
 		public InstantAction end;
 		public List followsStart;
@@ -169,16 +143,14 @@ public class VelosoSchedulabilityChecker implements SchedulabilityChecker, Clone
 		BigDecimal maxEnv;
 		BigDecimal minEnv;
 
-		public EnvelopeEntry(StartInstantAction s, TemporalMetricState tms)
-		{
+		public EnvelopeEntry(StartInstantAction s, TemporalMetricState tms) {
 			this(s, s.getSibling());
 			maxEnv = s.parent.getMaxDuration(tms);
 			minEnv = s.parent.getMinDuration(tms);
 			constraints.addAll(TemporalConstraint.getBounds(s, s.getSibling(), maxEnv, minEnv));
 		}
 
-		public EnvelopeEntry(InstantAction s, InstantAction e)
-		{
+		public EnvelopeEntry(InstantAction s, InstantAction e) {
 			start = s;
 			end = e;
 			followsStart = new ArrayList();
@@ -186,79 +158,73 @@ public class VelosoSchedulabilityChecker implements SchedulabilityChecker, Clone
 			constraints = new HashSet();
 		}
 
-		public void addFollower(InstantAction a, TemporalMetricState s)
-		{
+		public void addFollower(InstantAction a, TemporalMetricState s) {
 			addFollowerOrder(start, a, s);
 		}
 
-		public void addFollowerOrder(InstantAction f, InstantAction s, TemporalMetricState tms)
-		{
-			followsStart.add(s);
-			constraints.add(TemporalConstraint.getConstraint(f, s));
-			if (s instanceof StartInstantAction)
-			{
-				StartInstantAction sa = (StartInstantAction) s;
-				//followsStart.add(sa.getSibling());
-				constraints.addAll(TemporalConstraint.getBounds(sa, sa.getSibling(), sa.parent.getMaxDuration(tms), sa.parent.getMinDuration(tms)));
+		public void addFollowerOrder(InstantAction f, InstantAction a, TemporalMetricState tms) {
+			followsStart.add(a);
+			constraints.add(TemporalConstraint.getConstraint(f, a));
+			if (a instanceof StartInstantAction) {
+				StartInstantAction sa = (StartInstantAction) a;
+				// followsStart.add(sa.getSibling());
+				constraints.addAll(TemporalConstraint.getBounds(sa, sa.getSibling(), sa.parent.getMaxDuration(tms),
+						sa.parent.getMinDuration(tms)));
 			}
 		}
 
-		public void addPreceder(InstantAction a, TemporalMetricState s)
-		{
+		public void addPreceder(InstantAction a, TemporalMetricState s) {
 			addPrecederOrder(a, end, s);
 		}
 
-		public void addPrecederOrder(InstantAction f, InstantAction s, TemporalMetricState tms)
-		{
+		public void addPrecederOrder(InstantAction f, InstantAction a, TemporalMetricState tms) {
 			precedesEnd.add(f);
-			constraints.add(TemporalConstraint.getConstraint(f, s));
-			if (f instanceof EndInstantAction)
-			{
+			constraints.add(TemporalConstraint.getConstraint(f, a));
+			if (f instanceof EndInstantAction) {
 				EndInstantAction ea = (EndInstantAction) f;
-				//precedesEnd.add(ea.getSibling());
-				constraints.addAll(TemporalConstraint.getBounds(ea.getSibling(), ea, ea.parent.getMaxDuration(tms), ea.parent.getMinDuration(tms)));
+				// precedesEnd.add(ea.getSibling());
+				constraints.addAll(TemporalConstraint.getBounds(ea.getSibling(), ea, ea.parent.getMaxDuration(tms),
+						ea.parent.getMinDuration(tms)));
 			}
 		}
 
-        public boolean check()
-        {
+		public boolean check() {
 			Set testSet = new HashSet(followsStart);
 			testSet.retainAll(precedesEnd);
-			if (testSet.isEmpty()) return true;
-			else return stnCheck();
+			return testSet.isEmpty() ? true : stnCheck();
 		}
 
-        public boolean stnCheck()
-        {
-			if (stn == null) stn = new GraphSTN();
+		public boolean stnCheck() {
+			if (stn == null)
+				stn = new GraphSTN();
 			stn.addConstraints(constraints);
 			constraints = new HashSet();
 			return stn.consistentSource(end);
 		}
 
-		public Object clone()
-		{
+		public Object clone() {
 			EnvelopeEntry e = new EnvelopeEntry(start, end);
 			e.followsStart.addAll(followsStart);
 			e.precedesEnd.addAll(precedesEnd);
 			e.constraints.addAll(constraints);
-			if (stn != null) e.stn = (SimpleTemporalNetwork) ((GraphSTN) stn).clone();
+			if (stn != null)
+				e.stn = (SimpleTemporalNetwork) ((GraphSTN) stn).clone();
 			e.maxEnv = maxEnv;
 			e.minEnv = minEnv;
 			return e;
 		}
 
 		public void add(InstantAction a, TemporalMetricState s,
-				VelosoSchedulabilityChecker velosoSchedulabilityChecker) {
-			if (velosoSchedulabilityChecker.checkOrder(this.start, a))
+				VelosoSchedulabilityChecker c) {
+			if (c.checkOrder(this.start, a))
 				addFollower(a, s);
-			if (velosoSchedulabilityChecker.checkOrder(a, this.end))
+			if (c.checkOrder(a, this.end))
 				addPreceder(a, s);
 			Set fs = new HashSet();
 			Iterator fit = this.followsStart.iterator();
 			while (fit.hasNext()) {
 				InstantAction f = (InstantAction) fit.next();
-				if (velosoSchedulabilityChecker.checkOrder(f, a))
+				if (c.checkOrder(f, a))
 					fs.add(f);
 			}
 			fit = fs.iterator();

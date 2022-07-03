@@ -50,35 +50,35 @@ public class NamedFunction extends javaff.data.Literal implements Function
 		super.setPredicateSymbol((PredicateSymbol)fs);
 	}
 	
-	public BigDecimal getValue(MetricState ms)
+	public BigDecimal getValue(MetricState s)
     {
-		return ms.getValue(this);
+		return s.getValue(this);
 	}
 
-	public BigDecimal getMaxValue(MatrixSTN stn)
+	public BigDecimal getMaxValue(MatrixSTN n)
     {
 		return getValue(null);
 	}
 
-	public BigDecimal getMinValue(MatrixSTN stn)
+	public BigDecimal getMinValue(MatrixSTN n)
     {
 		return getValue(null);
 	}
 
-	public boolean effectedBy(ResourceOperator ro)
+	public boolean effectedBy(ResourceOperator o)
     {
-		return this.equals(ro.resource);
+		return this.equals(o.resource);
 	}
 
-	public Function replace(ResourceOperator ro)
+	public Function replace(ResourceOperator o)
     {
-		if (ro.resource.equals(this))
+		if (o.resource.equals(this))
 		{
-			if (ro.type == MetricSymbolStore.INCREASE) return new BinaryFunction(MetricSymbolStore.PLUS, this, ro.change);
-			else if (ro.type == MetricSymbolStore.DECREASE) return new BinaryFunction(MetricSymbolStore.MINUS, this, ro.change);
-			else if (ro.type == MetricSymbolStore.SCALE_UP) return new BinaryFunction(MetricSymbolStore.MULTIPLY, this, ro.change);
-			else if (ro.type == MetricSymbolStore.SCALE_DOWN) return new BinaryFunction( MetricSymbolStore.DIVIDE, this, ro.change);
-			else if (ro.type == MetricSymbolStore.ASSIGN) return ro.change;
+			if (o.type == MetricSymbolStore.increase) return new BinaryFunction(MetricSymbolStore.plus, this, o.change);
+			else if (o.type == MetricSymbolStore.decrease) return new BinaryFunction(MetricSymbolStore.minus, this, o.change);
+			else if (o.type == MetricSymbolStore.scaleUP) return new BinaryFunction(MetricSymbolStore.multiply, this, o.change);
+			else if (o.type == MetricSymbolStore.scaleDown) return new BinaryFunction( MetricSymbolStore.divide, this, o.change);
+			else if (o.type == MetricSymbolStore.assign) return o.change;
 			else return this;
 		}
 		else return this;
@@ -86,13 +86,11 @@ public class NamedFunction extends javaff.data.Literal implements Function
 
 	public Function staticify(Map fValues)
     {
-		if (isStatic())
-		{
-			BigDecimal d = (BigDecimal) fValues.get(this);
-			return new NumberFunction(d);
-		}
-		else return this;
-    }
+		if (!isStatic())
+			return this;
+		BigDecimal d = (BigDecimal) fValues.get(this);
+		return new NumberFunction(d);
+	}
 
 	public Function makeOnlyDurationDependent(MetricState s)
     {
@@ -102,9 +100,7 @@ public class NamedFunction extends javaff.data.Literal implements Function
 	public Function ground(Map varMap)
     {
 		NamedFunction nf = new NamedFunction((FunctionSymbol)name);
-		Iterator pit = parameters.iterator();
-		while (pit.hasNext())
-		{
+		for (Iterator pit = parameters.iterator(); pit.hasNext();) {
 			Variable v = (Variable) pit.next();
 			PDDLObject po = (PDDLObject) varMap.get(v);
 			nf.addParameter(po);
@@ -124,9 +120,7 @@ public class NamedFunction extends javaff.data.Literal implements Function
 
 	public int hashCode()
     {
-		int hash = 7;
-		hash = 31 * hash ^ name.hashCode();
-		hash = 31 * hash ^ parameters.hashCode();
-		return hash;
+		int hash = 31 * 7 ^ name.hashCode();
+		return hash = 31 * hash ^ parameters.hashCode();
     }
 }

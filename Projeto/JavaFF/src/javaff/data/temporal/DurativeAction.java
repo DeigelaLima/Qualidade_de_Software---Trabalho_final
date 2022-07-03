@@ -69,19 +69,19 @@ public class DurativeAction extends Action
 	}
 
 
-	public BigDecimal getDuration(MetricState ms)
+	public BigDecimal getDuration(MetricState s)
 	{
-		return durationConstraint.getDuration(ms);
+		return durationConstraint.getDuration(s);
 	}
 
-	public BigDecimal getMaxDuration(MetricState ms)
+	public BigDecimal getMaxDuration(MetricState s)
 	{
-		return durationConstraint.getMaxDuration(ms);
+		return durationConstraint.getMaxDuration(s);
 	}
 
-	public BigDecimal getMinDuration(MetricState ms)
+	public BigDecimal getMinDuration(MetricState s)
 	{
-		return durationConstraint.getMinDuration(ms);
+		return durationConstraint.getMinDuration(s);
 	}
 
 	//WARNING these methods may not work correctly. Only the instant actions should be worked with

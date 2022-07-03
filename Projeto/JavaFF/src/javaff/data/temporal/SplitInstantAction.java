@@ -37,11 +37,11 @@ public abstract class SplitInstantAction extends InstantAction
     public DurativeAction parent;
 	public abstract SplitInstantAction getSibling();
 
-	public boolean equals(Object obj)
+	public boolean equals(Object o)
     {
-		if (obj instanceof SplitInstantAction)
+		if (o instanceof SplitInstantAction)
 		{
-			SplitInstantAction a = (SplitInstantAction) obj;
+			SplitInstantAction a = (SplitInstantAction) o;
 			return (name.equals(a.name) && params.equals(a.params) && this.getClass().equals(a.getClass()));
 		}
 		else return false;
@@ -52,7 +52,7 @@ public abstract class SplitInstantAction extends InstantAction
         return name.hashCode() ^ params.hashCode() ^ this.getClass().hashCode();
     }
 
-	public abstract void applySplit(TemporalMetricState ts);
+	public abstract void applySplit(TemporalMetricState s);
 	public abstract boolean exclusivelyInvariant(Proposition p);
 	
 }

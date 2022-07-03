@@ -41,118 +41,106 @@ import javaff.data.UngroundEffect;
 import javaff.planning.MetricState;
 import javaff.planning.State;
 
-public class BinaryComparator implements javaff.data.GroundCondition, javaff.data.UngroundCondition
-{
+public class BinaryComparator implements javaff.data.GroundCondition, javaff.data.UngroundCondition {
 	public Function first;
 	public Function second;
-    public int type;
+	public int type;
 
-    public BinaryComparator(String s, Function f1, Function f2)
-    {
+	public BinaryComparator(String s, Function f1, Function f2) {
 		type = MetricSymbolStore.getType(s);
 		first = f1;
 		second = f2;
-    }
+	}
 
-	public BinaryComparator(int t, Function f1, Function f2)
-    {
+	public BinaryComparator(int t, Function f1, Function f2) {
 		type = t;
 		first = f1;
 		second = f2;
-    }
+	}
 
-	public boolean isStatic()
-	{
+	public boolean isStatic() {
 		return (first.isStatic() && second.isStatic());
 	}
 
-	public boolean effectedBy(ResourceOperator ro)
-	{
-		return (first.effectedBy(ro) || second.effectedBy(ro));
+	public boolean effectedBy(ResourceOperator o) {
+		return (first.effectedBy(o) || second.effectedBy(o));
 	}
 
-	public GroundCondition staticifyCondition(Map fValues)
-	{
+	public GroundCondition staticifyCondition(Map fValues) {
 		first = first.staticify(fValues);
 		second = second.staticify(fValues);
 		return this;
 	}
 
-	public UngroundCondition minus(UngroundEffect effect)
-	{
-		return effect.effectsAdd(this);
+	public UngroundCondition minus(UngroundEffect e) {
+		return e.effectsAdd(this);
 	}
 
-	public Set getStaticPredicates()
-	{
+	public Set getStaticPredicates() {
 		return new HashSet();
 	}
 
-    public GroundCondition groundCondition(Map varMap)
-    {
+	public GroundCondition groundCondition(Map varMap) {
 		return new BinaryComparator(type, first.ground(varMap), second.ground(varMap));
 	}
 
-	public boolean isTrue(State s)
-    {
+	public boolean stateIsTrue(State s) {
 		MetricState ms = (MetricState) s;
 		BigDecimal df = first.getValue(ms);
 		BigDecimal ds = second.getValue(ms);
-
 		boolean result = false;
 
-		if (type == MetricSymbolStore.GREATER_THAN) result = (df.compareTo(ds) > 0);
-		else if (type == MetricSymbolStore.GREATER_THAN_EQUAL) result =  (df.compareTo(ds) >= 0);
-		else if (type == MetricSymbolStore.LESS_THAN) result =  (df.compareTo(ds) < 0);
-		else if (type == MetricSymbolStore.LESS_THAN_EQUAL) result =  (df.compareTo(ds) <= 0);
-		else if (type == MetricSymbolStore.EQUAL) result =  (df.compareTo(ds) == 0);
+		if (type == MetricSymbolStore.greaterThan)
+			result = (df.compareTo(ds) > 0);
+		else if (type == MetricSymbolStore.greaterThanEqual)
+			result = (df.compareTo(ds) >= 0);
+		else if (type == MetricSymbolStore.lessThan)
+			result = (df.compareTo(ds) < 0);
+		else if (type == MetricSymbolStore.lessThanEqual)
+			result = (df.compareTo(ds) <= 0);
+		else if (type == MetricSymbolStore.equal)
+			result = (df.compareTo(ds) == 0);
 
 		return result;
-    }
-
-	public void PDDLPrint(PrintStream ps, int i)
-	{
-		PDDLPrinter.printToString(this, ps, false, false, i);
 	}
 
-	public Set getConditionalPropositions()
-	{
+	public void pddlPrint(PrintStream s, int i) {
+		PDDLPrinter.printToString(this, s, false, false, i);
+	}
+
+	public Set getConditionalPropositions() {
 		return new HashSet();
 	}
 
-  public Set getComparators()
-  {
-  	Set s = new HashSet();
-    s.add(this);
-    return s;
-  }
+	public Set getComparators() {
+		Set s = new HashSet();
+		s.add(this);
+		return s;
+	}
 
-
-	public String toString()
-	{
+	public String toString() {
 		return MetricSymbolStore.getSymbol(type) + " " + first.toString() + " " + second.toString();
 	}
 
-	public String toStringTyped()
-	{
+	public String toStringTyped() {
 		return MetricSymbolStore.getSymbol(type) + " " + first.toStringTyped() + " " + second.toStringTyped();
 	}
 
-
-	public boolean equals(Object obj)
-	{
-		if (obj instanceof BinaryComparator)
-		{
-			BinaryComparator bc = (BinaryComparator) obj;
-			if (bc.type == this.type && first.equals(bc.first) && second.equals(bc.second))	return true;
-			else if (((bc.type == MetricSymbolStore.LESS_THAN && this.type == MetricSymbolStore.GREATER_THAN) ||
-			 (this.type == MetricSymbolStore.LESS_THAN && bc.type == MetricSymbolStore.GREATER_THAN) ||
-			 (this.type == MetricSymbolStore.LESS_THAN_EQUAL && bc.type == MetricSymbolStore.GREATER_THAN_EQUAL) ||
-			 (this.type == MetricSymbolStore.LESS_THAN_EQUAL && bc.type == MetricSymbolStore.GREATER_THAN_EQUAL)) &&
-			         (first.equals(bc.second) && second.equals(bc.first))) return true;
-			else return false;
-		}
-		else return false;
+	public boolean equals(Object o) {
+		if (o instanceof BinaryComparator) {
+			BinaryComparator bc = (BinaryComparator) o;
+			if (bc.type == this.type && first.equals(bc.first) && second.equals(bc.second))
+				return true;
+			else if (((bc.type == MetricSymbolStore.lessThan && this.type == MetricSymbolStore.greaterThan)
+					|| (this.type == MetricSymbolStore.lessThan && bc.type == MetricSymbolStore.greaterThan)
+					|| (this.type == MetricSymbolStore.lessThanEqual && bc.type == MetricSymbolStore.greaterThanEqual)
+					|| (this.type == MetricSymbolStore.lessThanEqual && bc.type == MetricSymbolStore.greaterThanEqual))
+					&& (first.equals(bc.second) && second.equals(bc.first)))
+				return true;
+			else
+				return false;
+		} else
+			return false;
 	}
-	
+
 }

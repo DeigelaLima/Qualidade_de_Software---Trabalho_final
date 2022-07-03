@@ -52,32 +52,30 @@ public class TimeStampedPlan implements Plan
 	}
 
 		
-	public void print(PrintStream p)
+	public void print(PrintStream s)
 	{
 		Iterator ait = actions.iterator();
 		while (ait.hasNext())
 		{
 			TimeStampedAction a = (TimeStampedAction) ait.next();
-			p.println(a);
+			s.println(a);
 		}
 	}
 
-	public void print(PrintWriter p)
+	public void print(PrintWriter w)
 	{
 		Iterator ait = actions.iterator();
 		while (ait.hasNext())
 		{
 			TimeStampedAction a = (TimeStampedAction) ait.next();
-			p.println(a);
+			w.println(a);
 		}
 	}
 	
 	public Set getActions()
 	{
 		Set s = new HashSet();
-		Iterator ait = actions.iterator();
-		while (ait.hasNext())
-		{
+		for (Iterator ait = actions.iterator(); ait.hasNext();) {
 			TimeStampedAction a = (TimeStampedAction) ait.next();
 			s.add(a.action);
 		}

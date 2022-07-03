@@ -53,9 +53,7 @@ public class GraphSTN implements Cloneable, SimpleTemporalNetwork
     public boolean consistent()
     {
 		boolean consistency = true;
-		Iterator sit = nodes.iterator();
-		while (sit.hasNext() && consistency)
-		{
+		for (Iterator sit = nodes.iterator(); sit.hasNext() && consistency;) {
 			InstantAction source = (InstantAction) sit.next();
 			consistency = consistentSource(source);
 		}
@@ -71,32 +69,27 @@ public class GraphSTN implements Cloneable, SimpleTemporalNetwork
 		for (int count = 0; count < nodeIndex.size(); ++count)
 		{
 			p[count] = (InstantAction) nodeIndex.get(count);
-			d[count] = javaff.JavaFF.MAX_DURATION;
+			d[count] = javaff.JavaFF.maxDuration;
 		}
 		d[nodeIndex.indexOf(source)] = new BigDecimal(0);
 
 		for (int count = 0; count < nodeIndex.size(); ++count)
 		{
-			Iterator eit = edges.iterator();
-			while (eit.hasNext())
-			{
+			for (Iterator eit = edges.iterator(); eit.hasNext();) {
 				TemporalConstraint e = (TemporalConstraint) eit.next();
-				//relax
 				int sourceIndex = nodeIndex.indexOf(e.y);
 				int sinkIndex = nodeIndex.indexOf(e.x);
-				if (e.b.add(d[sourceIndex]).compareTo(d[sinkIndex])<0)
-				{
+				if (e.b.add(d[sourceIndex]).compareTo(d[sinkIndex]) < 0) {
 					d[sinkIndex] = e.b.add(d[sourceIndex]);
 					p[sinkIndex] = e.y;
 				}
 			}
 		}
 
-		Iterator eit = edges.iterator();
-		while (eit.hasNext())
-		{
+		for (Iterator eit = edges.iterator(); eit.hasNext();) {
 			TemporalConstraint e = (TemporalConstraint) eit.next();
-			if (e.b.add(d[nodeIndex.indexOf(e.y)]).compareTo(d[nodeIndex.indexOf(e.x)]) < 0) return false;
+			if (e.b.add(d[nodeIndex.indexOf(e.y)]).compareTo(d[nodeIndex.indexOf(e.x)]) < 0)
+				return false;
 		}
 		
 		return true;
@@ -104,9 +97,7 @@ public class GraphSTN implements Cloneable, SimpleTemporalNetwork
 
     public void addConstraints(Set constraints)
     {
-		Iterator oit = constraints.iterator();
-		while (oit.hasNext())
-		{
+		for (Iterator oit = constraints.iterator(); oit.hasNext();) {
 			TemporalConstraint c = (TemporalConstraint) oit.next();
 			addConstraint(c);
 		}
@@ -122,18 +113,18 @@ public class GraphSTN implements Cloneable, SimpleTemporalNetwork
 
 	private class Node
     {
-		InstantAction a;
+		InstantAction action;
 		BigDecimal d;
 		Node p;
 
-		public Node(InstantAction act)
+		public Node(InstantAction action)
 		{
-			act = a;
+			this.action = action;
 		}
 
 		public int hashCode()
 		{
-			return a.hashCode();
+			return action.hashCode();
 		}
     }
    

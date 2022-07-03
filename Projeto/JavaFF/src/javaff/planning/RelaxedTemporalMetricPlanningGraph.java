@@ -50,16 +50,16 @@ public class RelaxedTemporalMetricPlanningGraph extends RelaxedMetricPlanningGra
 		super(gp);
 	}
 	
-	protected void resetAll(State S)
+	protected void resetAll(State s)
 	{
-		super.resetAll(S);
-		super.setGoal(S.goal);
-		addEndActionGoals((TemporalMetricState) S);
+		super.resetAll(s);
+		super.setGoal(s.goal);
+		addEndActionGoals((TemporalMetricState) s);
 	}
 
-	protected void addEndActionGoals(TemporalMetricState S)
+	protected void addEndActionGoals(TemporalMetricState s)
     {
-		Iterator dait = S.openActions.iterator();
+		Iterator dait = s.openActions.iterator();
 		while (dait.hasNext())
 		{
 			DurativeAction da = (DurativeAction) dait.next();
@@ -71,28 +71,26 @@ public class RelaxedTemporalMetricPlanningGraph extends RelaxedMetricPlanningGra
 	public Plan getPlan(State s)// if on the start action is in also add the end action as a matter of course
     {
 		Plan p = super.getPlan(s);
-		if (p != null)
-		{
-			Set acts = p.getActions();
-			Iterator lit = acts.iterator();
-			while (lit.hasNext())
-			{
-				Action a = (Action) lit.next();
-				if (a instanceof StartInstantAction)
-				{
-					StartInstantAction sa = (StartInstantAction) a;
-					if (!acts.contains(sa.getSibling())) ((TotalOrderPlan)p).addAction(sa.getSibling());
-				}
+		if (p == null)
+			return p;
+		Set acts = p.getActions();
+		Iterator lit = acts.iterator();
+		while (lit.hasNext()) {
+			Action a = (Action) lit.next();
+			if (a instanceof StartInstantAction) {
+				StartInstantAction sa = (StartInstantAction) a;
+				if (!acts.contains(sa.getSibling()))
+					((TotalOrderPlan) p).addAction(sa.getSibling());
 			}
 		}
-		
 		return p;
 	}
 
-	protected PGFunction makeFunction(Function f)
+	public PGFunction makeFunction(Function f)
     {
-		PGFunction pgf = super.makeFunction(f);
-		if (pgf == null && f instanceof DurationFunction) pgf = new PGDurationFunction(((DurationFunction)f).durativeAction);
+		PGFunction pgf = super.makeFunction(f) == null && f instanceof DurationFunction
+				? new PGDurationFunction(((DurationFunction) f).durativeAction)
+				: super.makeFunction(f);
 		return pgf;
 	}	
 

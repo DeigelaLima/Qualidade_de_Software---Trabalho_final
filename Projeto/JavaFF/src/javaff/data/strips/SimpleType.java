@@ -66,11 +66,11 @@ public class SimpleType extends Type
 		return name + " - " + superType;
 	}
 
-	public boolean equals(Object obj)
+	public boolean equals(Object o)
 	{
-		if (obj instanceof SimpleType)
+		if (o instanceof SimpleType)
 		{
-			SimpleType ty = (SimpleType) obj;
+			SimpleType ty = (SimpleType) o;
 			return (name.equals(ty.name));
 		}
 		else return false;
@@ -78,12 +78,11 @@ public class SimpleType extends Type
 
 	public int hashCode()
 	{
-		return 31 * 8 + name.hashCode();
+		return 248 + name.hashCode();
 	}
 
 	public boolean isOfType(Type t) // is this of type t (i.e. is type further up the hierarchy)
 	{
-		if (this.equals(t)) return true;
-		else return superType.isOfType(t);
+		return this.equals(t) ? true : superType.isOfType(t);
 	}
 }

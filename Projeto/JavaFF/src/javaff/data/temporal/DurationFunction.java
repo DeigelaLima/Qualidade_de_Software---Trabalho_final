@@ -52,29 +52,27 @@ public class DurationFunction extends NamedFunction
 		ungroundDurativeAction = uda;
 	}
 
-	public BigDecimal getValue(MetricState ms)
+	public BigDecimal getValue(MetricState s)
 	{
-		return durativeAction.getDuration(ms);
+		return durativeAction.getDuration(s);
 	}
 
-	public BigDecimal getMaxValue(MatrixSTN stn)
+	public BigDecimal getMaxValue(MatrixSTN n)
 	{
-		return stn.getMaximum(durativeAction);
+		return n.getMaximum(durativeAction);
 	}
 
-	public BigDecimal getMinValue(MatrixSTN stn)
+	public BigDecimal getMinValue(MatrixSTN n)
 	{
-		return stn.getMinimum(durativeAction);
+		return n.getMinimum(durativeAction);
 	}
 
 	public Function staticify(Map fValues)
 	{
-		if (durativeAction.staticDuration())
-		{
-			BigDecimal d = getValue(null);
-			return new NumberFunction(d);
-		}
-		else return this;
+		if (!durativeAction.staticDuration())
+			return this;
+		BigDecimal d = getValue(null);
+		return new NumberFunction(d);
 	}
 
 	public Function makeOnlyDurationDependent(MetricState s)
@@ -101,16 +99,16 @@ public class DurationFunction extends NamedFunction
 	public int hashCode()
 	{
 		int hash = 7;
-		if (durativeAction != null) hash = 31 * hash ^ durativeAction.hashCode();
-		else  hash = 31 * hash ^ ungroundDurativeAction.hashCode();
+		hash = durativeAction != null ? 31 * hash ^ durativeAction.hashCode()
+				: 31 * hash ^ ungroundDurativeAction.hashCode();
 		return hash;
 	}
 
-	public boolean equals(Object obj)
+	public boolean equals(Object o)
 	{
-		if (obj instanceof DurationFunction)
+		if (o instanceof DurationFunction)
 		{
-			DurationFunction f = (DurationFunction) obj;
+			DurationFunction f = (DurationFunction) o;
 			if (f.durativeAction != null && durativeAction != null) return durativeAction.equals(f.durativeAction);
 			else if (f.ungroundDurativeAction != null && ungroundDurativeAction != null) return ungroundDurativeAction.equals(f.ungroundDurativeAction);
 			else return false;

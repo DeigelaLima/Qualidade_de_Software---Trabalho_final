@@ -42,11 +42,11 @@ public class OperatorName
 		return name;
 	}
 
-	public boolean equals(Object obj)
+	public boolean equals(Object o)
 	{
-		if (obj instanceof OperatorName)
+		if (o instanceof OperatorName)
 		{
-			OperatorName os = (OperatorName) obj;
+			OperatorName os = (OperatorName) o;
 			return (name.equals(os.name));
 		}
 		else return false;

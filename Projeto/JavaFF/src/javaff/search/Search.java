@@ -26,36 +26,29 @@
  * 
  ************************************************************************/
 
-
 package javaff.search;
 
 import java.util.Comparator;
 
 import javaff.planning.State;
 
-public abstract class Search
-{
+public abstract class Search {
 	protected State start;
-	protected int nodeCount = 0;
-	protected Comparator comp;
+	protected int nodeCount;
+	protected Comparator comparator;
 
-	public Search(State s)
-	{
-		start = s;
+	protected Search(State state) {
+		start = state;
 	}
 
-	public Comparator getComparator()
-	{
-		return comp;
+	public Comparator getComparator() {
+		return comparator;
 	}
 
-	public void setComparator(Comparator c)
-	{
-		comp = c;
+	public void setComparator(Comparator c) {
+		this.comparator = c;
 	}
 
 	public abstract State search();
-	
 
 }
-

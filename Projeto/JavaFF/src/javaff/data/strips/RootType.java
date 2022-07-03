@@ -32,29 +32,21 @@ package javaff.data.strips;
 
 import javaff.data.Type;
 
-public class RootType extends SimpleType
-{
-	private static RootType r;
-	
-	private RootType()
-    {
+public class RootType extends SimpleType {
+	private static RootType rootType;
+
+	public RootType() {
 		name = "object";
 		superType = null;
 	}
 
-	public static RootType getInstance()
-    {
-		if (r == null) r = new RootType();
-		return r;
-    }
-	
-	public boolean isOfType(Type t)
-    {
-		return t.equals(this);
+	public static RootType getInstance() {
+		if (rootType == null)
+			rootType = new RootType();
+		return rootType;
 	}
 
-	public void setSuperType(Type pSuperType)
-    {
-		return;
-    }
+	public boolean isOfType(Type t) {
+		return t.equals(this);
+	}
 }

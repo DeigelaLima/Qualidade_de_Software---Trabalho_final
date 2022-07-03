@@ -48,11 +48,9 @@ public abstract class Operator implements javaff.data.PDDLPrintable
     public String toString()
     {
 		String stringrep = name.toString();
-		Iterator i = params.iterator();
-		while (i.hasNext())
-		{
+		for (Iterator i = params.iterator(); i.hasNext();) {
 			Variable v = (Variable) i.next();
-			stringrep += " " +  v.toString();
+			stringrep += " " + v.toString();
 		}
 		return stringrep;
     }
@@ -60,16 +58,14 @@ public abstract class Operator implements javaff.data.PDDLPrintable
 	public String toStringTyped()
     {
 		String stringrep = name.toString();
-		Iterator i = params.iterator();
-		while (i.hasNext())
-		{
+		for (Iterator i = params.iterator(); i.hasNext();) {
 			Variable v = (Variable) i.next();
-			stringrep += " " +  v.toStringTyped();
+			stringrep += " " + v.toStringTyped();
 		}
 		return stringrep;
     }
 
-	public abstract boolean effects(PredicateSymbol ps);
+	public abstract boolean effects(PredicateSymbol s);
 	protected abstract Action ground(Map varMap);
 	public abstract Set getStaticConditionPredicates();
 	
@@ -81,18 +77,16 @@ public abstract class Operator implements javaff.data.PDDLPrintable
 		while (pit.hasNext())
 		{
 			Variable v = (Variable) pit.next();
-			PDDLObject o = (PDDLObject) vit.next();
-			varMap.put(v,o);
+			varMap.put(v,((PDDLObject) vit.next()));
 		}
-		Action a = this.ground(varMap);
-		return a;
+		return this.ground(varMap);
 		
 		
 	}
 
-	public Set ground(UngroundProblem up)
+	public Set ground(UngroundProblem p)
 	{
-		Set s = getParameterCombinations(up);
+		Set s = getParameterCombinations(p);
 		Set rSet = new HashSet();
 		Iterator sit = s.iterator();
 		while (sit.hasNext())
@@ -114,105 +108,79 @@ public abstract class Operator implements javaff.data.PDDLPrintable
 
 		List combination = new ArrayList(arraysize);
 		for (int i = 0; i < arraysize; ++i)
-		{
 			combination.add(null);
-		}
 
 		// Set for holding the combinations
 		Set combinations = new HashSet();
 		combinations.add(combination);
 
-		// Loop through ones that must be static
-		Iterator scit = staticConditions.iterator();
-		while (scit.hasNext())
-		{
+		for (Iterator scit = staticConditions.iterator(); scit.hasNext();) {
 			Predicate p = (Predicate) scit.next();
-
 			Set newcombs = new HashSet();
-
 			Set sp = (HashSet) up.staticPropositionMap.get(p.getPredicateSymbol());
-
-			// Loop through those in the initial state
 			Iterator spit = sp.iterator();
-			while (spit.hasNext())
-			{
+			while (spit.hasNext()) {
 				Proposition prop = (Proposition) spit.next();
 				Iterator combit = combinations.iterator();
-				while (combit.hasNext())
-				{
+				while (combit.hasNext()) {
 					ArrayList c = (ArrayList) combit.next();
-					// check its ok to put in
 					boolean ok = true;
 					Iterator propargit = prop.getParameters().iterator();
 					int counter = 0;
-					while (propargit.hasNext() && ok)
-					{
+					while (propargit.hasNext() && ok) {
 						PDDLObject arg = (PDDLObject) propargit.next();
 						Variable k = (Variable) p.getParameters().get(counter);
 						int i = params.indexOf(k);
-						boolean condition = i >=0 && set[i] && !c.get(i).equals(arg);
+						boolean condition = i >= 0 && set[i] && !c.get(i).equals(arg);
 						if (condition)
 							ok = false;
-						counter ++;
+						counter++;
 					}
-					//if so, duplicate it and put it in and put it in newcombs
-					if (ok)
-					{
+					if (ok) {
 						List sdup = (ArrayList) c.clone();
 						counter = 0;
 						propargit = prop.getParameters().iterator();
-						while (propargit.hasNext())
-						{
+						while (propargit.hasNext()) {
 							PDDLObject arg = (PDDLObject) propargit.next();
 							Variable k = (Variable) p.getParameters().get(counter);
 							int i = params.indexOf(k);
-                            if (i >=0 )
-                            {
-								sdup.set(i,arg);
+							if (i >= 0) {
+								sdup.set(i, arg);
 								counter++;
-                            }
+							}
 						}
 						newcombs.add(sdup);
 					}
 				}
 			}
-
 			combinations = newcombs;
-
 			Iterator pit = p.getParameters().iterator();
-			while (pit.hasNext())
-			{
+			while (pit.hasNext()) {
 				Variable s = (Variable) pit.next();
 				int i = params.indexOf(s);
-
-				if (i>=0) set[i] = true;
+				if (i >= 0)
+					set[i] = true;
 			}
 		}
 
 		int counter = 0;
-		Iterator pit = params.iterator();
-		while (pit.hasNext())
-		{
+		for (Iterator pit = params.iterator(); pit.hasNext();) {
 			Variable p = (Variable) pit.next();
-			if (!set[counter])
-			{
+			if (!set[counter]) {
 				Set newcombs = new HashSet();
 				Iterator cit = combinations.iterator();
-				while (cit.hasNext())
-				{
+				while (cit.hasNext()) {
 					ArrayList s = (ArrayList) cit.next();
 					Set objs = (HashSet) up.typeSets.get(p.getType());
 					Iterator oit = objs.iterator();
-					while (oit.hasNext())
-					{
+					while (oit.hasNext()) {
 						PDDLObject ob = (PDDLObject) oit.next();
 						List sdup = (ArrayList) s.clone();
-						sdup.set(counter,ob);
+						sdup.set(counter, ob);
 						newcombs.add(sdup);
 					}
 				}
 				combinations = newcombs;
-
 			}
 			++counter;
 		}

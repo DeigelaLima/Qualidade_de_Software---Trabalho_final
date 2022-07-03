@@ -38,74 +38,60 @@ import javaff.data.UngroundCondition;
 import javaff.data.UngroundEffect;
 import javaff.planning.State;
 
-public class TrueCondition implements GroundCondition, UngroundCondition
-{
+public class TrueCondition implements GroundCondition, UngroundCondition {
 	private static TrueCondition t;
-	
-	private TrueCondition()
-    {
-    }
 
-	public GroundCondition staticifyCondition(Map fValues)
-	{
+	public TrueCondition() {
+	}
+
+	public GroundCondition staticifyCondition(Map fValues) {
 		return this;
 	}
-	
 
-	public static TrueCondition getInstance()
-	{
-		if (t == null) t = new TrueCondition();
+	public static TrueCondition getInstance() {
+		if (t == null)
+			t = new TrueCondition();
 		return t;
 	}
 
-	public UngroundCondition minus(UngroundEffect effect)
-	{
-		return this;
-	}
-	
-	public boolean isTrue(State s)
-    {
-		return true;
-    }
-	
-	public boolean isStatic()
-	{
-		return true;
-	}
-
-	public Set getStaticPredicates()
-	{
-		return new HashSet();
-	}
-
-	public Set getConditionalPropositions()
-	{
-		return new HashSet();
-	}
-
-  public Set getComparators()
-  {
-  	return new HashSet();
-  }
-
-	public GroundCondition groundCondition(Map varMap)
-	{
+	public UngroundCondition minus(UngroundEffect e) {
 		return this;
 	}
 
-	public String toString()
-	{
+	public boolean stateIsTrue(State s) {
+		return true;
+	}
+
+	public boolean isStatic() {
+		return true;
+	}
+
+	public Set getStaticPredicates() {
+		return new HashSet();
+	}
+
+	public Set getConditionalPropositions() {
+		return new HashSet();
+	}
+
+	public Set getComparators() {
+		return new HashSet();
+	}
+
+	public GroundCondition groundCondition(Map varMap) {
+		return this;
+	}
+
+	public String toString() {
 		return "()";
 	}
 
-	public String toStringTyped()
-	{
+	public String toStringTyped() {
 		return toString();
 	}
 
-	public void PDDLPrint(java.io.PrintStream p, int indent)
-	{
-		PDDLPrinter.printToString(this, p, false, false, indent);
+	public void pddlPrint(java.io.PrintStream s, int indent) {
+		PDDLPrinter.printToString(this, s, false, false, indent);
 	}
 
 }

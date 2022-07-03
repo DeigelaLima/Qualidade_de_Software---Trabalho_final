@@ -34,62 +34,55 @@ import java.util.LinkedList;
 import javaff.planning.Filter;
 import javaff.planning.State;
 
-public class BreadthFirstSearch extends Search
-{
-	
+public class BreadthFirstSearch extends Search {
+
 	protected LinkedList open;
 	protected Hashtable closed;
-	protected Filter filter = null;
+	protected Filter filter;
 
-	public BreadthFirstSearch(State s)
-	{
+	public BreadthFirstSearch(State s) {
 		super(s);
 		open = new LinkedList();
 		closed = new Hashtable();
 	}
 
-	public void setFilter(Filter f)
-	{
+	public void setFilter(Filter f) {
 		filter = f;
 	}
 
-
-	public void updateOpen(State S)
-    {
-		open.addAll(S.getNextStates(filter.getActions(S)));
+	public void updateOpen(State s) {
+		open.addAll(s.getNextStates(filter.getActions(s)));
 	}
 
-	public State removeNext()
-    {
+	public State removeNext() {
 		return (State) ((LinkedList) open).removeFirst();
 	}
-	
+
 	public boolean needToVisit(State s) {
-		Integer Shash = new Integer(s.hashCode());
-		State D = (State) closed.get(Shash);
-		
-		if (closed.containsKey(Shash) && D.equals(s)) return false;
-		
-		closed.put(Shash, s);
+		Integer shash = Integer.valueOf(s.hashCode());
+		State dState = (State) closed.get(shash);
+
+		if (closed.containsKey(shash) && dState.equals(s))
+			return false;
+
+		closed.put(shash, s);
 		return true;
 	}
 
 	public State search() {
-		
+
 		open.add(start);
 
-		while (!open.isEmpty())
-		{
+		while (!open.isEmpty()) {
 			State s = removeNext();
 			if (needToVisit(s)) {
 				++nodeCount;
 				if (s.goalReached()) {
 					return s;
-				} else {
-					updateOpen(s);
 				}
+				updateOpen(s);
 			}
-			
+
 		}
 		return null;
 	}

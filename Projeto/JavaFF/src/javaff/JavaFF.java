@@ -48,135 +48,114 @@ import javaff.planning.State;
 import javaff.planning.TemporalMetricState;
 import javaff.search.AStarSearch;
 
-public class JavaFF
-{
-    public static BigDecimal EPSILON = new BigDecimal(0.01);
-	public static BigDecimal MAX_DURATION = new BigDecimal("100000"); //maximum duration in a duration constraint
-	public static boolean VALIDATE = false;
-
-	public static Random generator = null;
+public class JavaFF {
+	public static BigDecimal epsilon = new BigDecimal(0.01);
+	// maximum duration in a duration constraint
+	public static BigDecimal maxDuration = new BigDecimal("100000");
+	public static Random generator;
 
 	public static PrintStream planOutput = System.out;
 	public static PrintStream parsingOutput = System.out;
 	public static PrintStream infoOutput = System.out;
 	public static PrintStream errorOutput = System.err;
 
-	public static void main (String args[]) {
-		EPSILON = EPSILON.setScale(2,BigDecimal.ROUND_HALF_EVEN);
-		MAX_DURATION = MAX_DURATION.setScale(2,BigDecimal.ROUND_HALF_EVEN);
-		
-		generator = new SecureRandom();
-		
-		if (args.length < 2) {
-			System.out.println("Parameters needed: domainFile.pddl problemFile.pddl [random seed] [outputfile.sol");
+	public static void main(String args[]) {
+		epsilon = epsilon.setScale(2, BigDecimal.ROUND_HALF_EVEN);
+		maxDuration = maxDuration.setScale(2, BigDecimal.ROUND_HALF_EVEN);
 
-		} else {
+		generator = new SecureRandom();
+
+		if (args.length < 2)
+			parsingOutput.println("Parameters needed: domainFile.pddl problemFile.pddl [random seed] [outputfile.sol");
+		else {
 			File domainFile = new File(args[0]);
 			File problemFile = new File(args[1]);
 			File solutionFile = null;
-			if (args.length > 2)
-			{
+			if (args.length > 2) {
 				generator = new SecureRandom();
 				generator.setSeed(Integer.parseInt(args[2]));
 			}
-	
+
 			if (args.length > 3)
-			{
 				solutionFile = new File(args[3]);
-			}
-	
-			Plan plan = plan(domainFile,problemFile);
-	
-			if (solutionFile != null && plan != null) writePlanToFile(plan, solutionFile);
-			
+
+			Plan plan = plan(domainFile, problemFile);
+
+			if (solutionFile != null && plan != null)
+				writePlanToFile(plan, solutionFile);
+
 		}
 	}
 
-
-    public static Plan plan(File dFile, File pFile)
-    {
+	public static Plan plan(File dFile, File pFile) {
 		// ********************************
 		// Parse and Ground the Problem
 		// ********************************
 		long startTime = System.currentTimeMillis();
-		
+
 		UngroundProblem unground = PDDL21parser.parseFiles(dFile, pFile);
 
-		if (unground == null)
-		{
+		if (unground == null) {
 			System.out.println("Parsing error - see console for details");
 			return null;
 		}
 
-		//PDDLPrinter.printDomainFile(unground, System.out);
-		//PDDLPrinter.printProblemFile(unground, System.out);
+		// PDDLPrinter.printDomainFile(unground, System.out);
+		// PDDLPrinter.printProblemFile(unground, System.out);
 
-		GroundProblem ground = unground.ground();	
+		GroundProblem ground = unground.ground();
 		long afterGrounding = System.currentTimeMillis();
 
 		// ********************************
 		// Search for a plan
 		// ********************************
 
-		// Get the initial state
-		TemporalMetricState initialState = ground.getTemporalMetricInitialState();
-		
-        State goalState = performSearch(initialState);
-                
+		State goalState = performSearch(ground.getTemporalMetricInitialState());
+
 		long afterPlanning = System.currentTimeMillis();
 
-        TotalOrderPlan top = null;
-		if (goalState != null) top = (TotalOrderPlan) goalState.getSolution();
-		if (top != null) top.print(planOutput);
+		TotalOrderPlan topTotalOrderPlan = goalState != null ? (TotalOrderPlan) goalState.getSolution() : null;
+		if (topTotalOrderPlan != null)
+			topTotalOrderPlan.print(planOutput);
 
-		double groundingTime = (afterGrounding - startTime)/1000.00;
-		double planningTime = (afterPlanning - afterGrounding)/1000.00;
-		
-		//infoOutput.println("Instantiation Time =\t\t"+groundingTime+"sec");
-		infoOutput.println("Planning Time =\t"+planningTime+"sec");
-		
-		return top;
+		double groundingTime = (afterGrounding - startTime) / 1000.00;
+		double planningTime = (afterPlanning - afterGrounding) / 1000.00;
+		// infoOutput.println("Instantiation Time =\t\t"+groundingTime+"sec");
+		infoOutput.println("Planning Time =\t" + planningTime + "sec");
+
+		return topTotalOrderPlan;
 	}
 
-	private static void writePlanToFile(Plan plan, File fileOut)
-    {
-		try
-	    {
+	private static void writePlanToFile(Plan p, File fileOut) {
+		try {
 			FileOutputStream outputStream = new FileOutputStream(fileOut);
 			PrintWriter printWriter = new PrintWriter(outputStream);
-			plan.print(printWriter);
+			p.print(printWriter);
 			printWriter.close();
-		}
-		catch (FileNotFoundException e)
-	    {
+		} catch (FileNotFoundException e) {
 			errorOutput.println(e);
 			e.printStackTrace();
-		}
-		catch (IOException e)
-	    {
+		} catch (IOException e) {
 			errorOutput.println(e);
 			e.printStackTrace();
 		}
 
-    }
-    
-    public static State performSearch(TemporalMetricState initialState) {
-    	// *******************************************
-    	// Blind Search - Breadth First 
-    	// *******************************************
-    	
-    	infoOutput.println("Performing Breadth First (blind) search...");
-    	State goalState;		
-    	// create a Breadth-First Searcher
-    	//BreadthFirstSearch BFS = new BreadthFirstSearch(initialState);
-    	//BestFirstSearch BFS = new BestFirstSearch(initialState);
-    	AStarSearch BFS = new AStarSearch(initialState);
-    	// ... change to using the 'all actions' neighbourhood (a null filter, as it removes nothing)
-    	BFS.setFilter(NullFilter.getInstance());
-    	// and use that
-    	goalState = BFS.search();
-    	return goalState; // return the plan ****/
-      
-    }
-    
+	}
+
+	public static State performSearch(TemporalMetricState initialState) {
+		// *******************************************
+		// Blind Search - Breadth First
+		// *******************************************
+
+		infoOutput.println("Performing Breadth First (blind) search...");
+		State goalState;
+		// create a Breadth-First Searcher
+		AStarSearch aStarSearch = new AStarSearch(initialState);
+		// ... change to using the 'all actions' neighbourhood (a null filter, as it
+		// removes nothing)
+		aStarSearch.setFilter(NullFilter.getInstance());
+		return goalState = aStarSearch.search();
+
+	}
+
 }

@@ -56,11 +56,11 @@ public class PlanningGraph
 	Set actionMutexes;
 	List memorised;
 
-	protected Set readyActions = null; // PGActions that have all their propositions met, but not their PGBinaryComparators or preconditions are mutex
+	protected Set readyActions; // PGActions that have all their propositions met, but not their PGBinaryComparators or preconditions are mutex
 
-	boolean level_off = false;
+	boolean level_off;
 	static int NUMERIC_LIMIT = 4;
-	int numeric_level_off = 0;
+	int numeric_level_off;
 	int num_layers;
 
 	//******************************************************
@@ -83,49 +83,35 @@ public class PlanningGraph
 	{
 		setInitial(s);
 		resetAll(s);
-
-		//set up the intital set of facts
 		Set scheduledFacts = new HashSet(initial);
 		List scheduledActs = null;
-
 		scheduledActs = createFactLayer(scheduledFacts, 0);
 		List plan = null;
-
-		//create the graph==========================================
-		while (true)
-		{
+		while (true) {
 			scheduledFacts = createActionLayer(scheduledActs, num_layers);
-			++ num_layers;
+			++num_layers;
 			scheduledActs = createFactLayer(scheduledFacts, num_layers);
-
-			if (goalMet() && !goalMutex())
-			{
+			if (goalMet() && !goalMutex()) {
 				plan = extractPlan();
 			}
-			if (plan != null) break;
-			if (!level_off) numeric_level_off = 0;
+			if (plan != null)
+				break;
+			if (!level_off)
+				numeric_level_off = 0;
 			if (level_off || numeric_level_off >= NUMERIC_LIMIT) {
-				//printGraph();
 				break;
 			}
 		}
-
-
-
-		if (plan != null)
-		{
-			Iterator pit = plan.iterator();
-			TotalOrderPlan p = new TotalOrderPlan();
-			while (pit.hasNext())
-			{
-				PGAction a = (PGAction) pit.next();
-				if (!(a instanceof PGNoOp)) p.addAction(a.action);
-			}
-			//p.print(javaff.JavaFF.infoOutput);
-			return p;
+		if (plan == null)
+			return null;
+		Iterator pit = plan.iterator();
+		TotalOrderPlan p = new TotalOrderPlan();
+		while (pit.hasNext()) {
+			PGAction a = (PGAction) pit.next();
+			if (!(a instanceof PGNoOp))
+				p.addAction(a.action);
 		}
-		else return null;
-
+		return p;
 	}
 
 	//******************************************************
@@ -133,9 +119,7 @@ public class PlanningGraph
 	//******************************************************
 	protected void setActionMap(Set gactions)
 	{
-		Iterator ait = gactions.iterator();
-		while (ait.hasNext())
-		{
+		for (Iterator ait = gactions.iterator(); ait.hasNext();) {
 			Action a = (Action) ait.next();
 			PGAction pga = new PGAction(a);
 			actionMap.put(a, pga);
@@ -150,32 +134,24 @@ public class PlanningGraph
 
 	protected void setLinks()
 	{
-		Iterator ait = actions.iterator();
-		while (ait.hasNext())
-		{
+		for (Iterator ait = actions.iterator(); ait.hasNext();) {
 			PGAction pga = (PGAction) ait.next();
-
 			Iterator csit = pga.action.getConditionalPropositions().iterator();
-			while (csit.hasNext())
-			{
+			while (csit.hasNext()) {
 				Proposition p = (Proposition) csit.next();
 				PGProposition pgp = planningGraphProduct.getProposition(p, this);
 				pga.conditions.add(pgp);
 				pgp.achieves.add(pga);
 			}
-
 			Iterator alit = pga.action.getAddPropositions().iterator();
-			while (alit.hasNext())
-			{
+			while (alit.hasNext()) {
 				Proposition p = (Proposition) alit.next();
 				PGProposition pgp = planningGraphProduct.getProposition(p, this);
 				pga.achieves.add(pgp);
 				pgp.achievedBy.add(pga);
 			}
-
 			Iterator dlit = pga.action.getDeletePropositions().iterator();
-			while (dlit.hasNext())
-			{
+			while (dlit.hasNext()) {
 				Proposition p = (Proposition) dlit.next();
 				PGProposition pgp = planningGraphProduct.getProposition(p, this);
 				pga.deletes.add(pgp);
@@ -195,25 +171,21 @@ public class PlanningGraph
 
 		num_layers=0;
 
-		Iterator ait = actions.iterator();
-		while (ait.hasNext())
-		{
+		for (Iterator ait = actions.iterator(); ait.hasNext();) {
 			PGAction a = (PGAction) ait.next();
 			a.reset();
 		}
 
-		Iterator pit = planningGraphProduct.getPropositions().iterator();
-		while (pit.hasNext())
-		{
+		for (Iterator pit = planningGraphProduct.getPropositions().iterator(); pit.hasNext();) {
 			PGProposition p = (PGProposition) pit.next();
 			p.reset();
 		}
 	}
 
-	protected void setGoal(GroundCondition g)
+	protected void setGoal(GroundCondition c)
 	{
 		goal = new HashSet();
-		Iterator csit = g.getConditionalPropositions().iterator();
+		Iterator csit = c.getConditionalPropositions().iterator();
 		while (csit.hasNext())
 		{
 			Proposition p = (Proposition) csit.next();
@@ -222,9 +194,9 @@ public class PlanningGraph
 		}
 	}
 
-	protected void setInitial(State S)
+	protected void setInitial(State s)
 	{
-		Set i = ((STRIPSState) S).facts;
+		Set i = ((STRIPSState) s).facts;
 		initial = new HashSet();
 		Iterator csit = i.iterator();
 		while (csit.hasNext())
@@ -237,9 +209,7 @@ public class PlanningGraph
 
 	protected void createNoOps()
 	{
-		Iterator pit = planningGraphProduct.getPropositions().iterator();
-		while (pit.hasNext())
-		{
+		for (Iterator pit = planningGraphProduct.getPropositions().iterator(); pit.hasNext();) {
 			PGProposition p = (PGProposition) pit.next();
 			PGNoOp n = new PGNoOp(p);
 			n.conditions.add(p);
@@ -259,44 +229,29 @@ public class PlanningGraph
 		memorised.add(new HashSet());
 		ArrayList scheduledActs = new ArrayList();
 		HashSet newMutexes = new HashSet();
-		Iterator fit = pFacts.iterator();
-		while (fit.hasNext())
-		{
+		for (Iterator fit = pFacts.iterator(); fit.hasNext();) {
 			PGProposition f = (PGProposition) fit.next();
-			if (f.layer < 0)
-			{
+			if (f.layer < 0) {
 				f.layer = pLayer;
 				scheduledActs.addAll(f.achieves);
 				level_off = false;
-
-				//calculate mutexes
-				if (pLayer != 0)
-				{
+				if (pLayer != 0) {
 					Iterator pit = planningGraphProduct.getPropositions().iterator();
-					while (pit.hasNext())
-					{
+					while (pit.hasNext()) {
 						PGProposition p = (PGProposition) pit.next();
-						if (p.layer >= 0 && f.checkPropMutex(p, pLayer))
-						{
+						if (p.layer >= 0 && f.checkPropMutex(p, pLayer)) {
 							f.makeMutex(p, pLayer, newMutexes);
 						}
 					}
 				}
-
 			}
 		}
 
-		//check old mutexes
-		Iterator pmit = propMutexes.iterator();
-		while (pmit.hasNext())
-		{
+		for (Iterator pmit = propMutexes.iterator(); pmit.hasNext();) {
 			MutexPair m = (MutexPair) pmit.next();
-			if (checkPropMutex(m, pLayer))
-			{
+			if (checkPropMutex(m, pLayer)) {
 				m.node1.makeMutex(m.node2, pLayer, newMutexes);
-			}
-			else
-			{
+			} else {
 				level_off = false;
 			}
 		}
@@ -308,9 +263,9 @@ public class PlanningGraph
 		return scheduledActs;
 	}
 
-	protected boolean checkPropMutex(MutexPair m, int l)
+	protected boolean checkPropMutex(MutexPair p, int l)
 	{
-		return ((PGProposition) m.node1).checkPropMutex((PGProposition) m.node2, l);
+		return ((PGProposition) p.node1).checkPropMutex((PGProposition) p.node2, l);
 	}
 
 	protected HashSet createActionLayer(List pActions, int pLayer)
@@ -327,16 +282,12 @@ public class PlanningGraph
 	protected HashSet getAvailableActions(List pActions, int pLayer)
 	{
 		HashSet actionSet = new HashSet();
-		Iterator ait = pActions.iterator();
-		while (ait.hasNext())
-		{
+		for (Iterator ait = pActions.iterator(); ait.hasNext();) {
 			PGAction a = (PGAction) ait.next();
-			if (a.layer < 0)
-			{
+			if (a.layer < 0) {
 				a.counter++;
 				a.difficulty += pLayer;
-				if (a.counter >= a.conditions.size())
-				{
+				if (a.counter >= a.conditions.size()) {
 					actionSet.add(a);
 					level_off = false;
 				}
@@ -348,13 +299,11 @@ public class PlanningGraph
 	protected HashSet filterSet(Set pActions, int pLayer)
 	{                                                             
 		HashSet filteredSet = new HashSet();
-		Iterator ait = pActions.iterator();
-		while (ait.hasNext())
-		{
+		for (Iterator ait = pActions.iterator(); ait.hasNext();) {
 			PGAction a = (PGAction) ait.next();
 			if (noMutexes(a.conditions, pLayer))
 				filteredSet.add(a);
-			else 
+			else
 				readyActions.add(a);
 		}
 		return filteredSet;
@@ -364,40 +313,28 @@ public class PlanningGraph
 	{
 		HashSet newMutexes = new HashSet();
 
-		Set newPreActions = new HashSet();
+		new HashSet();
 		HashSet scheduledFacts = new HashSet();
 
-		Iterator ait = filteredSet.iterator();
-		while (ait.hasNext())
-		{
+		for (Iterator ait = filteredSet.iterator(); ait.hasNext();) {
 			PGAction a = (PGAction) ait.next();
 			scheduledFacts.addAll(a.achieves);
 			a.layer = pLayer;
 			level_off = false;
-
-			//caculate new mutexes
 			Iterator a2it = actions.iterator();
-			while (a2it.hasNext())
-			{
+			while (a2it.hasNext()) {
 				PGAction a2 = (PGAction) a2it.next();
-				if (a2.layer >= 0 && a.checkActionMutex(a2, pLayer))
-				{
+				if (a2.layer >= 0 && a.checkActionMutex(a2, pLayer)) {
 					a.makeMutex(a2, pLayer, newMutexes);
 				}
 			}
 		}
 
-		//check old mutexes
-		Iterator amit = actionMutexes.iterator();
-		while (amit.hasNext())
-		{
+		for (Iterator amit = actionMutexes.iterator(); amit.hasNext();) {
 			MutexPair m = (MutexPair) amit.next();
-			if (checkActionMutex(m, pLayer))
-			{
+			if (checkActionMutex(m, pLayer)) {
 				m.node1.makeMutex(m.node2, pLayer, newMutexes);
-			}
-			else
-			{
+			} else {
 				level_off = false;
 			}
 		}
@@ -407,18 +344,17 @@ public class PlanningGraph
 		return scheduledFacts;
 	}
 
-	protected boolean checkActionMutex(MutexPair m, int l)
+	protected boolean checkActionMutex(MutexPair p, int l)
 	{
-		return ((PGAction) m.node1).checkActionMutex((PGAction)m.node2, l);
+		return ((PGAction) p.node1).checkActionMutex((PGAction)p.node2, l);
 	}
 
 	protected boolean goalMet()
 	{
-		Iterator git = goal.iterator();
-		while (git.hasNext())
-		{
+		for (Iterator git = goal.iterator(); git.hasNext();) {
 			PGProposition p = (PGProposition) git.next();
-			if (p.layer < 0) return false;
+			if (p.layer < 0)
+				return false;
 		}
 		return true;
 	}
@@ -431,29 +367,26 @@ public class PlanningGraph
 	protected boolean noMutexes(Set s, int l)
 	{
 		Iterator sit = s.iterator();
-		if (sit.hasNext())
-		{
-			Node n = (Node) sit.next();
-			HashSet s2 = new HashSet(s);
-			s2.remove(n);
-			Iterator s2it = s2.iterator();
-			while (s2it.hasNext())
-			{
-				Node n2 = (Node) s2it.next();
-				if (n.mutexWith(n2, l))	return false;
-			}
-			return noMutexes(s2, l);
+		if (!sit.hasNext())
+			return true;
+		Node n = (Node) sit.next();
+		HashSet s2 = new HashSet(s);
+		s2.remove(n);
+		Iterator s2it = s2.iterator();
+		while (s2it.hasNext()) {
+			Node n2 = (Node) s2it.next();
+			if (n.mutexWith(n2, l))
+				return false;
 		}
-		else return true;
+		return noMutexes(s2, l);
 	}
 
 	protected boolean noMutexesTest(Node n, Set s, int l) // Tests to see if there is a mutex between n and all nodes in s
 	{
-		Iterator sit = s.iterator();
-		while (sit.hasNext())
-		{
+		for (Iterator sit = s.iterator(); sit.hasNext();) {
 			Node n2 = (Node) sit.next();
-			if (n.mutexWith(n2, l)) return false;
+			if (n.mutexWith(n2, l))
+				return false;
 		}
 		return true;
 	}
@@ -473,30 +406,26 @@ public class PlanningGraph
 	{
 
 		if (l == 0)
-		{
-			if (initial.containsAll(goalSet)) return new ArrayList();
-			else return null;
-		}
+			if (initial.containsAll(goalSet))
+				return new ArrayList();
+			else
+				return null;
 		// do memorisation stuff
 		Set badGoalSet = (HashSet) memorised.get(l);
 		if (badGoalSet.contains(goalSet)) return null;
 
-		List ass = searchLevel(goalSet, (l-1)); // returns a set of sets of possible action combinations
-		Iterator assit = ass.iterator();
+		Iterator assit = searchLevel(goalSet, (l - 1)).iterator();
 
 		while (assit.hasNext())
 		{
 			Set as = (HashSet) assit.next();
 			Set newgoal = new HashSet();
-
-			Iterator ait = as.iterator();
-			while (ait.hasNext())
-			{
+			for (Iterator ait = as.iterator(); ait.hasNext();) {
 				PGAction a = (PGAction) ait.next();
 				newgoal.addAll(a.conditions);
 			}
 
-			List al = searchPlan(newgoal, (l-1));
+			List al = searchPlan(newgoal, l - 1);
 			if (al != null)
 			{
 				List plan = new ArrayList(al);
@@ -527,8 +456,7 @@ public class PlanningGraph
 		List actionSetList = new ArrayList();
 		Set newGoalSet = new HashSet(goalSet);
 
-		Iterator git = goalSet.iterator();
-		PGProposition g = (PGProposition) git.next();
+		PGProposition g = (PGProposition) goalSet.iterator().next();
 		newGoalSet.remove(g);
 
 		Iterator ait = g.achievedBy.iterator();
@@ -539,8 +467,7 @@ public class PlanningGraph
 			{
 				Set newnewGoalSet = new HashSet(newGoalSet);
 				newnewGoalSet.removeAll(a.achieves);
-				List l = searchLevel(newnewGoalSet, layer);
-				Iterator lit = l.iterator();
+				Iterator lit = searchLevel(newnewGoalSet, layer).iterator();
 				while (lit.hasNext())
 				{
 					Set s = (HashSet) lit.next();
@@ -561,8 +488,7 @@ public class PlanningGraph
 			{
 				Set newnewGoalSet = new HashSet(newGoalSet);
 				newnewGoalSet.removeAll(a.achieves);
-				List l = searchLevel(newnewGoalSet, layer);
-				Iterator lit = l.iterator();
+				Iterator lit = searchLevel(newnewGoalSet, layer).iterator();
 				while (lit.hasNext())
 				{
 					Set s = (HashSet) lit.next();
@@ -585,8 +511,7 @@ public class PlanningGraph
 
 	public int getLayer(Action a)
 	{
-		PGAction pg = (PGAction) actionMap.get(a);
-		return pg.layer;
+		return ((PGAction) actionMap.get(a)).layer;
 	}
 
 	//******************************************************
@@ -612,8 +537,8 @@ public class PlanningGraph
 
 		public void setMutex(Node n, int l)
 		{
-			n.mutexTable.put(this, new Integer(l));
-			this.mutexTable.put(n, new Integer(l));
+			n.mutexTable.put(this, Integer.valueOf(l));
+			this.mutexTable.put(n, Integer.valueOf(l));
 		}
 
 		public boolean mutexWith(Node n, int l)
@@ -633,8 +558,7 @@ public class PlanningGraph
 			 */
 			Object o = mutexTable.get(n);
 			if (o == null) return false;
-			Integer i = (Integer) o;
-			return i.intValue() >= l;
+			return ((Integer) o).intValue() >= l;
 		}
 
 		public void makeMutex(Node n2, int l, Set mutexPairs) {
@@ -677,8 +601,7 @@ public class PlanningGraph
 		public void reset()
 		{
 			super.reset();
-			counter = 0;
-			difficulty = 0;
+			difficulty = counter = 0;
 		}
 
 		public String toString()
@@ -687,26 +610,23 @@ public class PlanningGraph
 		}
 
 		public boolean checkActionMutex(PGAction a2, int l) {
-			if (this == a2)
+			if (a2 == this)
 				return false;
-			Iterator p1it = this.deletes.iterator();
-			while (p1it.hasNext()) {
+			for (Iterator p1it = this.deletes.iterator(); p1it.hasNext();) {
 				PGProposition p1 = (PGProposition) p1it.next();
 				if (a2.achieves.contains(p1))
 					return true;
 				if (a2.conditions.contains(p1))
 					return true;
 			}
-			Iterator p2it = a2.deletes.iterator();
-			while (p2it.hasNext()) {
+			for (Iterator p2it = a2.deletes.iterator(); p2it.hasNext();) {
 				PGProposition p2 = (PGProposition) p2it.next();
 				if (this.achieves.contains(p2))
 					return true;
 				if (this.conditions.contains(p2))
 					return true;
 			}
-			Iterator pc1it = this.conditions.iterator();
-			while (pc1it.hasNext()) {
+			for (Iterator pc1it = this.conditions.iterator(); pc1it.hasNext();) {
 				PGProposition p1 = (PGProposition) pc1it.next();
 				Iterator pc2it = a2.conditions.iterator();
 				while (pc2it.hasNext()) {
@@ -763,9 +683,7 @@ public class PlanningGraph
 		}
 
 		public boolean checkPropMutex(PGProposition p2, int l) {
-			if (this == p2)
-				return false;
-			if (this.achievedBy.isEmpty() || p2.achievedBy.isEmpty())
+			if (this == p2 || this.achievedBy.isEmpty() || p2.achievedBy.isEmpty())
 				return false;
 			Iterator a1it = this.achievedBy.iterator();
 			while (a1it.hasNext()) {
@@ -811,44 +729,34 @@ public class PlanningGraph
 	public void printLayer(int i)
 	{
 		System.out.println("Facts:");
-		Iterator pit = planningGraphProduct.getPropositions().iterator();
-		while (pit.hasNext())
-		{
+		for (Iterator pit = planningGraphProduct.getPropositions().iterator(); pit.hasNext();) {
 			PGProposition p = (PGProposition) pit.next();
-			if (p.layer <= i && p.layer >= 0)
-			{
-				System.out.println("\t"+p);
+			if (p.layer <= i && p.layer >= 0) {
+				System.out.println("\t" + p);
 				System.out.println("\t\tmutex with");
 				Iterator mit = p.mutexTable.keySet().iterator();
-				while (mit.hasNext())
-				{
+				while (mit.hasNext()) {
 					PGProposition pm = (PGProposition) mit.next();
 					Integer il = (Integer) p.mutexTable.get(pm);
-					if (il.intValue() >= i)
-					{
-						System.out.println("\t\t\t"+pm);
+					if (il.intValue() >= i) {
+						System.out.println("\t\t\t" + pm);
 					}
 				}
 			}
 		}
 		if (i == num_layers) return;
 		System.out.println("Actions:");
-		Iterator ait = actions.iterator();
-		while (ait.hasNext())
-		{
+		for (Iterator ait = actions.iterator(); ait.hasNext();) {
 			PGAction a = (PGAction) ait.next();
-			if (a.layer <= i && a.layer >= 0)
-			{
-				System.out.println("\t"+a);
+			if (a.layer <= i && a.layer >= 0) {
+				System.out.println("\t" + a);
 				System.out.println("\t\tmutex with");
 				Iterator mit = a.mutexTable.keySet().iterator();
-				while (mit.hasNext())
-				{
+				while (mit.hasNext()) {
 					PGAction am = (PGAction) mit.next();
 					Integer il = (Integer) a.mutexTable.get(am);
-					if (il.intValue() >= i)
-					{
-						System.out.println("\t\t\t"+am);
+					if (il.intValue() >= i) {
+						System.out.println("\t\t\t" + am);
 					}
 				}
 			}

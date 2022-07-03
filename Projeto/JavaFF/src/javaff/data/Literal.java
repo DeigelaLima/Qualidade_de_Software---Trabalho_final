@@ -35,77 +35,60 @@ import java.util.List;
 
 import javaff.data.strips.PredicateSymbol;
 
-public abstract class Literal implements Condition, Effect
-{
+public abstract class Literal implements Condition {
 	protected PredicateSymbol name;
-    protected List parameters = new ArrayList(); // list of Parameters
+	protected List parameters = new ArrayList(); // list of Parameters
 
-	public void setPredicateSymbol(PredicateSymbol n)
-	{
+	public void setPredicateSymbol(PredicateSymbol n) {
 		name = n;
 	}
 
-	public PredicateSymbol getPredicateSymbol()
-	{
+	public PredicateSymbol getPredicateSymbol() {
 		return name;
 	}
-	
-	public List getParameters()
-	{
+
+	public List getParameters() {
 		return parameters;
 	}
 
-	public void addParameter(Parameter p)
-	{
+	public void addParameter(Parameter p) {
 		parameters.add(p);
 	}
 
-	public void addParameters(List l)
-	{
+	public void addParameters(List l) {
 		parameters.addAll(l);
 	}
 
-	public String toString()
-    {
+	public String toString() {
 		String stringrep = name.toString();
-		Iterator i = parameters.iterator();
-		while(i.hasNext())
-		{
+		for (Iterator i = parameters.iterator(); i.hasNext();) {
 			stringrep = stringrep + " " + i.next();
 		}
 		return stringrep;
-    }
+	}
 
-	public String toStringTyped()
-    {
+	public String toStringTyped() {
 		String stringrep = name.toString();
-		Iterator i = parameters.iterator();
-		while(i.hasNext())
-		{
+		for (Iterator i = parameters.iterator(); i.hasNext();) {
 			Parameter o = (Parameter) i.next();
 			stringrep += " " + o + " - " + o.type.toString();
 		}
 		return stringrep;
-    }
+	}
 
-    public boolean equals(Object obj)
-    {
-        if (obj instanceof Literal)
-		{
-			Literal p = (Literal) obj;
+	public boolean equals(Object o) {
+		if (o instanceof Literal) {
+			Literal p = (Literal) o;
 			return (name.equals(p.name) && parameters.equals(p.parameters) && this.getClass() == p.getClass());
-		}
-		else return false;
-    }
-  
+		} else
+			return false;
+	}
 
-	public boolean isStatic()
-	{
+	public boolean isStatic() {
 		return name.isStatic();
 	}
 
-	public void PDDLPrint(PrintStream p, int indent)
-	{
-		PDDLPrinter.printToString(this, p, false, true, indent);
+	public void pddlPrint(PrintStream s, int indent) {
+		PDDLPrinter.printToString(this, s, false, true, indent);
 	}
 }
