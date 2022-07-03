@@ -53,7 +53,6 @@ public class JavaFF {
 	// maximum duration in a duration constraint
 	public static BigDecimal maxDuration = new BigDecimal("100000");
 	public static Random generator;
-
 	public static PrintStream planOutput = System.out;
 	public static PrintStream parsingOutput = System.out;
 	public static PrintStream infoOutput = System.out;
