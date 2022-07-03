@@ -28,16 +28,16 @@
 
 package javaff.planning;
 
-import javaff.data.Action;
-import javaff.data.TotalOrderPlan;
-import javaff.data.GroundCondition;
-import javaff.data.strips.Proposition;
-import javaff.data.Plan;
-import javaff.data.strips.STRIPSInstantAction;
 import java.math.BigDecimal;
-import java.util.Set;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.Set;
+
+import javaff.data.Action;
+import javaff.data.GroundCondition;
+import javaff.data.Plan;
+import javaff.data.TotalOrderPlan;
+import javaff.data.strips.Proposition;
 
 public class STRIPSState extends State implements Cloneable
 {
