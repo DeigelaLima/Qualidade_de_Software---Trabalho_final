@@ -45,7 +45,9 @@ import javaff.planning.State;
 
 public class AND implements GroundCondition, GroundEffect, UngroundCondition, UngroundEffect {
 	protected Set literals = new HashSet(); // set of Literals
-
+	String str;
+	String and = "(and";
+	
 	public void add(Object o) {
 		if (!(o instanceof AND))
 			literals.add(o);
@@ -247,19 +249,19 @@ public class AND implements GroundCondition, GroundEffect, UngroundCondition, Un
 	}
 
 	public String toString() {
-		String str = "(and";
+		str = and;
 		for (Iterator it = literals.iterator(); it.hasNext();) {
 			str += " " + it.next();
 		}
-		return str += ")";
+		return str + ")";
 	}
 
 	public String toStringTyped() {
-		String str = "(and";
+		str = and;
 		for (Iterator it = literals.iterator(); it.hasNext();) {
 			Literal l = (Literal) it.next();
 			str += " " + l.toStringTyped();
 		}
-		return str += ")";
+		return str + ")";
 	}
 }

@@ -134,8 +134,8 @@ public class BinaryComparator implements javaff.data.GroundCondition, javaff.dat
 			else if (((bc.type == MetricSymbolStore.lessThan && this.type == MetricSymbolStore.greaterThan)
 					|| (this.type == MetricSymbolStore.lessThan && bc.type == MetricSymbolStore.greaterThan)
 					|| (this.type == MetricSymbolStore.lessThanEqual && bc.type == MetricSymbolStore.greaterThanEqual)
-					|| (this.type == MetricSymbolStore.lessThanEqual && bc.type == MetricSymbolStore.greaterThanEqual))
-					&& (first.equals(bc.second) && second.equals(bc.first)))
+
+			) && (first.equals(bc.second) && second.equals(bc.first)))
 				return true;
 			else
 				return false;

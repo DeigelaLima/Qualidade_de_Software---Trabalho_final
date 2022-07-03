@@ -41,6 +41,8 @@ import javaff.planning.MetricState;
 
 public class DurationConstraint implements PDDLPrintable {
 	Set constraints = new HashSet();
+	String str;
+	String and = "(and "; 
 
 	public boolean staticDuration() {
 		boolean rTest = true;
@@ -91,7 +93,7 @@ public class DurationConstraint implements PDDLPrintable {
 	}
 
 	public void pddlPrint(PrintStream s, int indent) {
-		s.println("(and ");
+		s.println(and);
 		Iterator cit = constraints.iterator();
 		while (cit.hasNext()) {
 			SimpleDurationConstraint c = (SimpleDurationConstraint) cit.next();
@@ -101,21 +103,23 @@ public class DurationConstraint implements PDDLPrintable {
 	}
 
 	public String toString() {
-		String str = "(and ";
+		str = and;
 		for (Iterator cit = constraints.iterator(); cit.hasNext();) {
 			SimpleDurationConstraint c = (SimpleDurationConstraint) cit.next();
 			str += c.toString();
 		}
-		return str += ")";
+		str += ")";
+		return str;
 	}
 
 	public String toStringTyped() {
-		String str = "(and ";
+		str = and;
 		for (Iterator cit = constraints.iterator(); cit.hasNext();) {
 			SimpleDurationConstraint c = (SimpleDurationConstraint) cit.next();
 			str += c.toStringTyped();
 		}
-		return str += ")";
+		str += ")";
+		return str;
 	}
 
 	public int hashCode() {
