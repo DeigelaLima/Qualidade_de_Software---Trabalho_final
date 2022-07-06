@@ -2,10 +2,11 @@
 package javaff.parser;
 
 /**
- * An implementation of interface CharStream, where the stream is assumed to contain only ASCII characters (without unicode processing).
+ * An implementation of interface CharStream, where the stream is assumed to
+ * contain only ASCII characters (without unicode processing).
  */
 public class SimpleCharStream {
-	public static final boolean staticFlag = false;
+	static boolean staticFlag = false;
 	int bufsize;
 	int available;
 	int tokenBegin;
@@ -21,7 +22,7 @@ public class SimpleCharStream {
 	protected int maxNextCharInd = 0;
 	protected int inBuf = 0;
 
-	protected void ExpandBuff(boolean wrapAround) {
+	protected void expandBuff(boolean wrapAround) {
 		char[] newbuffer = new char[bufsize + 2048];
 		int newbufline[] = new int[bufsize + 2048];
 		int newbufcolumn[] = new int[bufsize + 2048];
@@ -56,7 +57,7 @@ public class SimpleCharStream {
 		tokenBegin = 0;
 	}
 
-	protected void FillBuff() throws java.io.IOException {
+	protected void fillBuff() throws java.io.IOException {
 		if (maxNextCharInd == available) {
 			if (available == bufsize) {
 				if (tokenBegin > 2048) {
@@ -65,11 +66,11 @@ public class SimpleCharStream {
 				} else if (tokenBegin < 0)
 					bufpos = maxNextCharInd = 0;
 				else
-					ExpandBuff(false);
+					expandBuff(false);
 			} else if (available > tokenBegin)
 				available = bufsize;
 			else if ((tokenBegin - available) < 2048)
-				ExpandBuff(true);
+				expandBuff(true);
 			else
 				available = tokenBegin;
 		}
@@ -135,24 +136,24 @@ public class SimpleCharStream {
 			return buffer[bufpos];
 		}
 		if (++bufpos >= maxNextCharInd)
-			FillBuff();
+			fillBuff();
 		char c = buffer[bufpos];
 		UpdateLineColumn(c);
 		return (c);
 	}
 
 	/**
-	* @deprecated
-	* @see #getEndColumn
-	*/
+	 * @deprecated
+	 * @see #getEndColumn
+	 */
 	public int getColumn() {
 		return bufcolumn[bufpos];
 	}
 
 	/**
-	* @deprecated
-	* @see #getEndLine
-	*/
+	 * @deprecated
+	 * @see #getEndLine
+	 */
 	public int getLine() {
 		return bufline[bufpos];
 	}
@@ -269,8 +270,8 @@ public class SimpleCharStream {
 	}
 
 	/**
-	* Method to adjust line and column numbers for the start of a token.
-	*/
+	 * Method to adjust line and column numbers for the start of a token.
+	 */
 	public void adjustBeginLineColumn(int newLine, int newCol) {
 		int start = tokenBegin;
 		int len;

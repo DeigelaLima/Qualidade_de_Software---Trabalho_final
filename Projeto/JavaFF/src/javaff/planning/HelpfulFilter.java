@@ -34,31 +34,28 @@ import java.util.Set;
 
 import javaff.data.Action;
 
-public class HelpfulFilter implements Filter
-{
+public class HelpfulFilter implements Filter {
 	private static HelpfulFilter hf;
 
-	private HelpfulFilter()
-	{
+	private HelpfulFilter() {
 	}
 
-	public static HelpfulFilter getInstance()
-	{
-		if (hf == null) hf = new HelpfulFilter(); // Singleton, as in NullFilter
+	public static HelpfulFilter getInstance() {
+		if (hf == null)
+			hf = new HelpfulFilter(); // Singleton, as in NullFilter
 		return hf;
 	}
 
-	public Set getActions(State s)
-	{
+	public Set getActions(State s) {
 		STRIPSState SS = (STRIPSState) s;
 		SS.calculateRP(); // get the relaxed plan to the goal, to make sure helpful actions exist for S
 		Set ns = new HashSet();
 		Iterator ait = SS.helpfulActions.iterator(); // iterate over helpful actions
-		while (ait.hasNext())
-		{
+		while (ait.hasNext()) {
 			Action a = (Action) ait.next();
-			if (a.isApplicable(s)) ns.add(a); // and add them to the set to return if they're applicable
+			if (a.isApplicable(s))
+				ns.add(a); // and add them to the set to return if they're applicable
 		}
 		return ns;
 	}
-} 
+}

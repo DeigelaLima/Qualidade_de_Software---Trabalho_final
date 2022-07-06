@@ -34,31 +34,28 @@ import java.util.Set;
 
 import javaff.data.Action;
 
-public class NullFilter implements Filter
-{
+public class NullFilter implements Filter {
 	private static NullFilter nf;
 
-	private NullFilter()
-	{
+	private NullFilter() {
 	}
 
-	public static NullFilter getInstance()
-	{
-		if (nf == null) nf = new NullFilter(); // Singleton design pattern - return one central instance
+	public static NullFilter getInstance() {
+		if (nf == null)
+			nf = new NullFilter(); // Singleton design pattern - return one central instance
 		return nf;
 	}
 
-	public Set getActions(State s)
-	{
+	public Set getActions(State s) {
 		Set actionsFromS = s.getActions(); // get the logically appicable actions in S
 		Set ns = new HashSet();
 		Iterator ait = actionsFromS.iterator(); // Get an iterator over these actions
-		while (ait.hasNext())
-		{
+		while (ait.hasNext()) {
 			Action a = (Action) ait.next();
-			if (a.isApplicable(s)) ns.add(a); // Check they are applicable (will check numeric/temporal constraints)
+			if (a.isApplicable(s))
+				ns.add(a); // Check they are applicable (will check numeric/temporal constraints)
 		}
 		return ns;
 	}
 
-} 
+}

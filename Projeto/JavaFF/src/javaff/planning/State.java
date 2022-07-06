@@ -37,25 +37,10 @@ import javaff.data.Action;
 import javaff.data.GroundCondition;
 import javaff.data.Plan;
 
-public abstract class State implements Cloneable
-{
+public abstract class State implements Cloneable {
 	public GroundCondition goal;
 
-//	public Filter filter = null;
-
-//	public void setFilter(Filter f)
-//	{
-//		filter = f;
-//	}
-
-//	public Filter getFilter()
-//	{
-//		return filter;
-//	}
-
-//	public abstract Set getNextStates();       // get all the next possible states reachable from this state
-
-	public Set getNextStates(Set actions)      // get all the states after applying this set of actions
+	public Set getNextStates(Set actions) // get all the states after applying this set of actions
 	{
 		Set rSet = new HashSet();
 		for (Iterator ait = actions.iterator(); ait.hasNext();) {
@@ -65,13 +50,12 @@ public abstract class State implements Cloneable
 		return rSet;
 	}
 
-	public State apply(Action a)    // return a cloned copy
+	public State apply(Action a) // return a cloned copy
 	{
 		State s = null;
 		try {
 			s = (State) this.clone();
-		}
-		catch (CloneNotSupportedException e){
+		} catch (CloneNotSupportedException e) {
 			javaff.JavaFF.errorOutput.println(e);
 		}
 		a.apply(s);
@@ -79,10 +63,10 @@ public abstract class State implements Cloneable
 	}
 
 	public abstract BigDecimal getHValue();
+
 	public abstract BigDecimal getGValue();
 
-	public boolean goalReached()
-	{
+	public boolean goalReached() {
 		return goal.stateIsTrue(this);
 	}
 
@@ -90,7 +74,7 @@ public abstract class State implements Cloneable
 
 	public abstract Set getActions();
 
-	public boolean checkAvailability(Action a) //put in for invariant checking
+	public boolean checkAvailability(Action a) // put in for invariant checking
 	{
 		return true;
 	}

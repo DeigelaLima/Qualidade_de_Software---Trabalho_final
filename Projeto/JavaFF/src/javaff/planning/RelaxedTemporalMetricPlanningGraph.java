@@ -43,33 +43,28 @@ import javaff.data.temporal.DurationFunction;
 import javaff.data.temporal.DurativeAction;
 import javaff.data.temporal.StartInstantAction;
 
-public class RelaxedTemporalMetricPlanningGraph extends RelaxedMetricPlanningGraph
-{
-	public RelaxedTemporalMetricPlanningGraph(GroundProblem gp)
-    {
+public class RelaxedTemporalMetricPlanningGraph extends RelaxedMetricPlanningGraph {
+	public RelaxedTemporalMetricPlanningGraph(GroundProblem gp) {
 		super(gp);
 	}
-	
-	protected void resetAll(State s)
-	{
+
+	protected void resetAll(State s) {
 		super.resetAll(s);
 		super.setGoal(s.goal);
 		addEndActionGoals((TemporalMetricState) s);
 	}
 
-	protected void addEndActionGoals(TemporalMetricState s)
-    {
+	protected void addEndActionGoals(TemporalMetricState s) {
 		Iterator dait = s.openActions.iterator();
-		while (dait.hasNext())
-		{
+		while (dait.hasNext()) {
 			DurativeAction da = (DurativeAction) dait.next();
 			Proposition p = da.dummyGoal;
 			goal.add(getProposition(p));
 		}
-    }
+	}
 
 	public Plan getPlan(State s)// if on the start action is in also add the end action as a matter of course
-    {
+	{
 		Plan p = super.getPlan(s);
 		if (p == null)
 			return p;
@@ -86,50 +81,41 @@ public class RelaxedTemporalMetricPlanningGraph extends RelaxedMetricPlanningGra
 		return p;
 	}
 
-	public PGFunction makeFunction(Function f)
-    {
+	public PGFunction makeFunction(Function f) {
 		PGFunction pgf = super.makeFunction(f) == null && f instanceof DurationFunction
 				? new PGDurationFunction(((DurationFunction) f).durativeAction)
 				: super.makeFunction(f);
 		return pgf;
-	}	
+	}
 
-	protected class PGDurationFunction extends PGNamedFunction
-    {
+	protected class PGDurationFunction extends PGNamedFunction {
 		public DurativeAction durAct;
 
-		public PGDurationFunction(DurativeAction da)
-		{
+		public PGDurationFunction(DurativeAction da) {
 			durAct = da;
 		}
 
-		public BigDecimal getMaxValue(int layer, List maxes, List mins)
-		{
+		public BigDecimal getMaxValue(int layer, List maxes, List mins) {
 			return durAct.durationConstraint.getMaxDuration(null);
 		}
 
-		public BigDecimal getMinValue(int layer, List maxes, List mins)
-		{
+		public BigDecimal getMinValue(int layer, List maxes, List mins) {
 			return durAct.durationConstraint.getMinDuration(null);
 		}
 
-		public int hashcode()
-		{
+		public int hashcode() {
 			return durAct.hashCode();
 		}
 
-		public boolean effectedBy(PGResourceOperator ro)
-		{
+		public boolean effectedBy(PGResourceOperator ro) {
 			return false;
 		}
 
-		public boolean increase(PGResourceOperator ro)
-		{
+		public boolean increase(PGResourceOperator ro) {
 			return false;
 		}
 
-		public boolean decrease(PGResourceOperator ro)
-		{
+		public boolean decrease(PGResourceOperator ro) {
 			return false;
 		}
 	}
