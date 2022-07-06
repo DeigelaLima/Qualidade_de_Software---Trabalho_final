@@ -6,5 +6,6 @@
 
 #### Branches
 
-* Main (código original)
-* Testes (código refatorado)
+* [Main](https://github.com/DeigelaLima/Qualidade_de_Software---Trabalho_final/tree/main) (código original)
+* [Testes](https://github.com/DeigelaLima/Qualidade_de_Software---Trabalho_final/tree/testes) (código refatorado)
+
